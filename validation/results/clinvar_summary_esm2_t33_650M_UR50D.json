@@ -1,0 +1,14 @@
+{
+  "model": "facebook/esm2_t33_650M_UR50D",
+  "mode": "Wildtype marginals (fast)",
+  "n_proteins_scored": 2011,
+  "n_variants": 38901,
+  "n_pathogenic": 22669,
+  "pooled_auroc_zscored": 0.7709,
+  "pooled_auroc_raw": 0.8678,
+  "n_proteins_with_auroc": 1104,
+  "mean_per_protein_auroc": 0.8806,
+  "median_per_protein_auroc": 0.9308,
+  "frac_proteins_auroc_above_0.7": 0.894,
+  "wall_clock_seconds": 480.6
+}

@@ -1,0 +1,51 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Local environment & checkpoints
+.env
+.env.*
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+checkpoints/
+outputs/
+.cache/
+.gradio/
+gradio_cached_examples/
+
+# Model / dataset caches
+.huggingface/
+huggingface/
+hf_cache/
+*.pdb
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ProteinGym benchmark data (88 MB, re-downloadable from public S3)
+validation/data/

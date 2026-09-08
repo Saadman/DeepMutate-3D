@@ -1,0 +1,42 @@
+{
+  "device": "cpu (Apple M3, all cores)",
+  "model": "esm2_t33_650M_UR50D",
+  "threads": 6,
+  "results": [
+    {
+      "accession": "P69905",
+      "length": 142,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.408,
+      "ms_per_residue": 2.876
+    },
+    {
+      "accession": "P69905",
+      "length": 142,
+      "mode": "Masked marginals (accurate)",
+      "seconds": 30.982,
+      "ms_per_residue": 218.186
+    },
+    {
+      "accession": "P04637",
+      "length": 393,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.775,
+      "ms_per_residue": 1.971
+    },
+    {
+      "accession": "P04637",
+      "length": 393,
+      "mode": "Masked marginals (accurate)",
+      "seconds": 236.189,
+      "ms_per_residue": 600.99
+    },
+    {
+      "accession": "P0DTC2",
+      "length": 1273,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 3.498,
+      "ms_per_residue": 2.748
+    }
+  ]
+}

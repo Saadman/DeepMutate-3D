@@ -1,0 +1,12 @@
+# ProtScan-3D — runtime dependencies
+# Local: Apple Silicon (mps) or CPU.  Deployed: Hugging Face ZeroGPU (cuda).
+
+gradio>=4.36.0
+# ZeroGPU supports torch 2.8.0 up to 2.13.x; the upper bound keeps the Space on
+# a version its runtime actually provides.
+torch>=2.8.0,<2.14.0
+transformers>=4.40.0
+requests>=2.31.0
+pandas>=2.0.0
+py3Dmol>=2.0.0
+spaces>=0.28.0

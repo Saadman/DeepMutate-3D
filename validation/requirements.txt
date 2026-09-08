@@ -1,0 +1,5 @@
+# Validation-only dependencies. Deliberately NOT in the root requirements.txt:
+# the Hugging Face Space does not need them and they would bloat the image.
+# Install with:  pip install -r validation/requirements.txt
+-r ../requirements.txt
+pyarrow>=15.0.0

@@ -1,0 +1,57 @@
+DeepMutate-3D
+Copyright 2026 Rashid (github.com/Saadman)
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+--------------------------------------------------------------------------------
+THIRD-PARTY COMPONENTS AND DATA
+--------------------------------------------------------------------------------
+
+This project does not redistribute the components below; it retrieves them at
+runtime. Their licences govern that use, and the attributions here are required
+independently of the Apache-2.0 licence covering DeepMutate-3D's own source.
+
+ESM-2 protein language model
+    facebook/esm2_t30_150M_UR50D — MIT License, Meta AI (FAIR).
+    Lin, Z. et al. "Evolutionary-scale prediction of atomic-level protein
+    structure with a language model." Science 379, 1123-1130 (2023).
+    Meier, J. et al. "Language models enable zero-shot prediction of the effects
+    of mutations on protein function." NeurIPS (2021).
+
+AlphaFold Protein Structure Database
+    Predicted structures retrieved from https://alphafold.ebi.ac.uk are licensed
+    CC-BY-4.0 by EMBL-EBI and DeepMind, and may be used for academic and
+    commercial purposes WITH ATTRIBUTION. Use is subject to the EMBL-EBI Terms
+    of Use. Required citations:
+    Jumper, J. et al. "Highly accurate protein structure prediction with
+    AlphaFold." Nature 596, 583-589 (2021).
+    Varadi, M. et al. "AlphaFold Protein Structure Database in 2024: providing
+    structure coverage for over 214 million protein sequences." Nucleic Acids
+    Research 52, D368-D375 (2024).
+
+UniProt Knowledgebase
+    Sequences retrieved from https://rest.uniprot.org are available under
+    CC-BY-4.0. The UniProt Consortium. "UniProt: the Universal Protein
+    Knowledgebase in 2025." Nucleic Acids Research (2025).
+
+ProteinGym (validation only, not required by the application)
+    Deep mutational scanning benchmark used by validation/run_proteingym.py.
+    Notin, P. et al. "ProteinGym: Large-Scale Benchmarks for Protein Fitness
+    Prediction and Design." NeurIPS Datasets and Benchmarks (2023).
+
+Software dependencies
+    gradio (Apache-2.0), transformers (Apache-2.0), pytorch (BSD-3-Clause),
+    pandas (BSD-3-Clause), requests (Apache-2.0), py3Dmol / 3Dmol.js
+    (BSD-3-Clause), spaces (Apache-2.0), pyarrow (Apache-2.0).
+
+--------------------------------------------------------------------------------
+DISCLAIMER
+--------------------------------------------------------------------------------
+
+DeepMutate-3D predicts evolutionary constraint. It is a research tool for
+hypothesis generation and is NOT a clinical or diagnostic device. Its output
+must not be used to inform medical decisions.

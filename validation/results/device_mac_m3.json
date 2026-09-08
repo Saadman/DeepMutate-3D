@@ -1,0 +1,77 @@
+{
+  "device_info": {
+    "device": "mps",
+    "torch": "2.14.0",
+    "python": "3.13.5",
+    "platform": "macOS-14.4-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "on_hf_space": false
+  },
+  "model": "facebook/esm2_t33_650M_UR50D",
+  "results": [
+    {
+      "accession": "P01308",
+      "name": "Insulin",
+      "length": 110,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.065,
+      "ms_per_residue": 0.588
+    },
+    {
+      "accession": "P01308",
+      "name": "Insulin",
+      "length": 110,
+      "mode": "Masked marginals (accurate)",
+      "seconds": 4.815,
+      "ms_per_residue": 43.771
+    },
+    {
+      "accession": "P69905",
+      "name": "Haemoglobin alpha",
+      "length": 142,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.087,
+      "ms_per_residue": 0.615
+    },
+    {
+      "accession": "P69905",
+      "name": "Haemoglobin alpha",
+      "length": 142,
+      "mode": "Masked marginals (accurate)",
+      "seconds": 7.819,
+      "ms_per_residue": 55.06
+    },
+    {
+      "accession": "P04637",
+      "name": "p53",
+      "length": 393,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.177,
+      "ms_per_residue": 0.45
+    },
+    {
+      "accession": "P00533",
+      "name": "EGFR (truncated)",
+      "length": 1022,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.438,
+      "ms_per_residue": 0.429
+    },
+    {
+      "accession": "P0DTC2",
+      "name": "SARS-CoV-2 spike",
+      "length": 1022,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.426,
+      "ms_per_residue": 0.417
+    },
+    {
+      "accession": "P04637",
+      "name": "p53",
+      "length": 393,
+      "mode": "Masked marginals (accurate)",
+      "seconds": 62.269,
+      "ms_per_residue": 158.445
+    }
+  ]
+}

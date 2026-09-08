@@ -1,0 +1,5 @@
+protein,length,mode,cpu_s,mps_s,gpu_s,cpu_ms_res,mps_ms_res,gpu_ms_res,gpu_vs_cpu,gpu_vs_mps
+Haemoglobin alpha,142,masked,30.982,7.819,1.45,218.186,55.06,10.2,21.4,5.4
+p53,393,masked,236.189,62.269,10.99,600.99,158.445,28.0,21.5,5.7
+Haemoglobin alpha,142,wt,0.408,0.087,0.18,2.876,0.615,1.2,2.4,0.5
+SARS-CoV-2 spike,1273,wt,3.498,0.426,0.31,2.748,0.417,0.2,13.7,2.1

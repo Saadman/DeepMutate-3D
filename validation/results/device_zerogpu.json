@@ -1,0 +1,56 @@
+{
+  "device": "cuda (ZeroGPU, NVIDIA)",
+  "model": "esm2_t33_650M_UR50D",
+  "results": {
+    "P69905|wt": {
+      "seconds": 0.18,
+      "ms_per_residue": 1.2,
+      "length": 142,
+      "all_seconds": [
+        2.2,
+        0.19,
+        0.18,
+        0.34
+      ]
+    },
+    "P69905|masked": {
+      "seconds": 1.45,
+      "ms_per_residue": 10.2,
+      "length": 142,
+      "all_seconds": [
+        1.47,
+        1.45,
+        1.51
+      ]
+    },
+    "P04637|masked": {
+      "seconds": 10.99,
+      "ms_per_residue": 28.0,
+      "length": 393,
+      "all_seconds": [
+        11.07,
+        10.99
+      ]
+    },
+    "P0DTC2|wt": {
+      "seconds": 0.31,
+      "ms_per_residue": 0.2,
+      "length": 1273,
+      "all_seconds": [
+        0.41,
+        0.36,
+        0.31
+      ]
+    },
+    "P04637|wt": {
+      "seconds": 0.18,
+      "ms_per_residue": 0.5,
+      "length": 393
+    },
+    "P0DTC2|masked": {
+      "seconds": 152.33,
+      "ms_per_residue": 119.7,
+      "length": 1273
+    }
+  }
+}

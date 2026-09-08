@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "DeepMutate-3D: interactive protein language model mutation scanning on AlphaFold structures"
+message: "If you use this software, please cite it using these metadata."
+type: software
+authors:
+  - given-names: Rashid
+    alias: Saadman
+    email: rashidsaadman@gmail.com
+repository-code: "https://github.com/Saadman/DeepMutate-3D"
+url: "https://huggingface.co/spaces/ras1992/DeepMutate-3D"
+abstract: >-
+  DeepMutate-3D scores every possible single amino-acid substitution in a protein
+  with the ESM-2 protein language model, using the log-likelihood ratio of
+  mutant to wildtype residue, and paints the resulting per-residue sensitivity
+  scores onto the protein's AlphaFold-predicted structure as an interactive 3D
+  heatmap.
+keywords:
+  - protein language model
+  - ESM-2
+  - AlphaFold
+  - variant effect prediction
+  - deep mutational scanning
+  - structural bioinformatics
+license: Apache-2.0
+version: 0.1.0
+date-released: "2026-09-07"

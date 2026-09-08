@@ -1,0 +1,12 @@
+{
+  "mode": "Wildtype marginals (fast)",
+  "model": "facebook/esm2_t30_150M_UR50D",
+  "n_assays": 197,
+  "n_variants_total": 644231,
+  "mean_spearman": 0.3922,
+  "median_spearman": 0.4413,
+  "std_spearman": 0.1965,
+  "frac_above_0.3": 0.7107,
+  "frac_above_0.5": 0.3706,
+  "wall_clock_seconds": 11.3
+}
