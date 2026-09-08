@@ -22,6 +22,7 @@ placed at import time as ZeroGPU expects; per-call tensors are built inside the
 
 from __future__ import annotations
 
+import base64
 import html as html_lib
 import inspect
 import json
@@ -105,6 +106,26 @@ FONT_STACK = (
     '"Helvetica Neue", Arial, sans-serif'
 )
 MONO_STACK = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace'
+
+
+
+LOGO_PATH = pathlib.Path(__file__).parent / "docs" / "assets" / "logo-header.png"
+
+
+def _logo_data_uri() -> str:
+    """Inline the logo so the page needs no static file route.
+
+    Returns an empty string if the asset is missing, so a partial checkout still
+    launches rather than failing at import.
+    """
+    try:
+        encoded = base64.b64encode(LOGO_PATH.read_bytes()).decode()
+    except OSError:
+        return ""
+    return f"data:image/png;base64,{encoded}"
+
+
+LOGO_DATA_URI = _logo_data_uri()
 
 _MODEL_CACHE: dict = {}
 
@@ -877,6 +898,13 @@ BLOCKS_KWARGS = {} if _LAUNCH_ACCEPTS_THEME else {"theme": _THEME, "css": CSS}
 
 
 with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
+    if LOGO_DATA_URI:
+        gr.HTML(
+            '<div style="display:flex;justify-content:center;padding:4px 0 2px">'
+            f'<img src="{LOGO_DATA_URI}" alt="DeepMutate-3D" '
+            'style="max-width:420px;width:100%;height:auto;border-radius:10px">'
+            "</div>"
+        )
     gr.Markdown(
         "# DeepMutate-3D\n"
         "**Protein-language-model mutation scanning, painted onto the AlphaFold fold.**\n\n"

@@ -18,19 +18,27 @@ preload_from_hub:
   - facebook/esm2_t33_650M_UR50D
 ---
 
-# DeepMutate-3D
+<p align="center">
+  <img src="docs/assets/logo-banner.png" alt="DeepMutate-3D" width="620">
+</p>
 
-Predict the effect of every possible point mutation in a protein and see the
-result on its 3D structure.
+<h1 align="center">DeepMutate-3D</h1>
+
+<p align="center">
+  Predict the effect of every possible point mutation in a protein
+  and see the result on its 3D structure.
+</p>
 
 DeepMutate-3D scores all 19 possible substitutions at every residue with the
 ESM-2 protein language model, then paints the per-residue sensitivity onto the
 AlphaFold predicted fold. Red marks positions where mutation is likely to be
 damaging. Blue marks positions that tolerate change.
 
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97-Live%20Demo-yellow)](https://huggingface.co/spaces/ras1992/DeepMutate-3D)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python"></a>
+  <a href="https://huggingface.co/spaces/ras1992/DeepMutate-3D"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Live%20Demo-yellow" alt="Live Demo"></a>
+</p>
 
 ## Contents
 

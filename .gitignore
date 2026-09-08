@@ -49,3 +49,6 @@ Thumbs.db
 
 # ProteinGym benchmark data (88 MB, re-downloadable from public S3)
 validation/data/
+
+# Archives and OS cruft in the asset folder
+*.zip
