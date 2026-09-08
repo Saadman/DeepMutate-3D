@@ -23,7 +23,7 @@ acid substitutions without training on experimental data, but their output is a
 table of numbers. The structural context that makes such a table interpretable,
 which residues sit in an active site, a buried core, or a flexible loop, lives
 in separate software. Bridging the two currently requires local installation,
-model weights, and scripting, which places the method out of reach of many
+model weights and scripting, which places the method out of reach of many
 laboratory scientists.
 
 **Results.** DeepMutate-3D scores all 19 possible substitutions at every
@@ -31,16 +31,27 @@ position of a protein using ESM-2 log-likelihood ratios, condenses them into a
 per-residue sensitivity score, retrieves the matching AlphaFold model, and
 paints the scores onto the structure as an interactive heat map in a web
 browser. Predictions are zero-shot. On the ProteinGym substitution benchmark
-(217 assays, 696,311 measured variants) the deployed configuration reaches a
-mean Spearman correlation of 0.425, consistent with the published ESM-2 650M
-baseline of 0.414. On 38,901 ClinVar variants across 2,011 proteins it separates
-pathogenic from benign substitutions with a mean per-protein AUROC of 0.881.
-In three case studies with independent ground truth it recovers TP53 cancer
-hotspots (permutation p = 0.0007), enzyme active sites, and all eight
-disulfide-bonded cysteines of lysozyme C (hypergeometric p = 1.0e-11).
+(217 assays, 696,311 measured variants) it reaches a mean Spearman correlation
+of 0.425, within the range reported for ESM-2 650M. On 38,901 ClinVar variants
+across 2,011 proteins it separates pathogenic from benign substitutions with a
+mean per-protein AUROC of 0.881. Applied to proteins with independent ground
+truth, it places the six TP53 cancer hotspots among the most constrained
+positions of the DNA-binding domain (permutation p = 0.009) and ranks all eight
+cysteines of lysozyme C's four disulfide bridges within the ten most constrained
+of 147 positions (hypergeometric p = 1.0e-11).
 
-**Availability.** Apache-2.0. Runs in a browser with no installation, on shared
-NVIDIA hardware, or locally on CPU or Apple Silicon.
+Two comparisons made during validation generalise beyond this tool. Increasing
+model capacity buys more than refining the scoring protocol: ESM-2 650M under
+single-pass scoring exceeds ESM-2 150M under per-residue masked scoring while
+using two orders of magnitude less computation. And benchmark rank correlation
+does not predict functional-site recovery: two scoring modes separated by 0.007
+mean Spearman on ProteinGym differ markedly on the case studies, recovering
+eight versus six of the lysozyme disulfide cysteines.
+
+**Availability.** https://huggingface.co/spaces/ras1992/DeepMutate-3D runs in a
+browser with no installation or account, on shared NVIDIA hardware. Source,
+validation scripts and all result files are at
+https://github.com/Saadman/DeepMutate-3D under Apache-2.0.
 
 ---
 
