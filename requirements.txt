@@ -1,7 +1,9 @@
 # ProtScan-3D — runtime dependencies
 # Local: Apple Silicon (mps) or CPU.  Deployed: Hugging Face ZeroGPU (cuda).
 
-gradio>=4.36.0
+# Pinned to the Gradio 5 line: 6.26.0 failed to render interactive
+# inputs in Safari, leaving the app unusable there.
+gradio>=5.49.0,<6.0.0
 # ZeroGPU supports torch 2.8.0 up to 2.13.x; the upper bound keeps the Space on
 # a version its runtime actually provides.
 torch>=2.8.0,<2.14.0
