@@ -1036,8 +1036,9 @@ with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
                 value="Wildtype marginals (fast)",
                 label="Scoring mode",
                 info=(
-                    "Wildtype marginals uses one pass per window and is nearly "
-                    "as accurate. Masked marginals runs one pass per residue."
+                    "Wildtype marginals: one pass per window, near-identical "
+                    "rank correlation. Masked marginals: one pass per residue, "
+                    "measurably better at pinpointing functional sites."
                 ),
             )
 
