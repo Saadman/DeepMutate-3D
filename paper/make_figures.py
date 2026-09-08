@@ -117,11 +117,11 @@ def figure3():
     ax.plot(pos, scores, color=SERIES, linewidth=1.4)
 
     median = float(np.median(scores))
-    ax.axhline(median, color=INK_2, linewidth=0.9, linestyle="--")
-    # Park the median label in the left margin, clear of the line itself.
-    ax.annotate(f"protein median {median:.2f}", xy=(2, median),
-                xytext=(2, 8), textcoords="offset points",
-                fontsize=7, color=INK_2, ha="left", va="bottom")
+    ax.axhline(median, color=INK_2, linewidth=0.9, linestyle="--",
+               label=f"protein median ({median:.2f})")
+    # The trace crosses the median line along its whole length, so there is no
+    # position for an in-plot label that does not sit on data. The value goes
+    # in the caption instead, and the line is identified in the legend.
 
     ax.scatter(cys, scores[[c - 1 for c in cys]], s=34, color=ACCENT,
                zorder=5, edgecolor="white", linewidth=0.8,
@@ -136,14 +136,16 @@ def figure3():
     ax.set_xlabel("Residue position")
     ax.set_ylabel("Sensitivity (mean LLR)")
     ax.set_title("Lysozyme C: all eight disulfide cysteines rank among the "
-                 "most constrained positions")
+                 "most constrained positions\n"
+                 "ESM-2 650M, masked marginals", fontsize=9)
     ax.grid(True, color=GRID, linewidth=0.6, alpha=0.9)
     ax.set_axisbelow(True)
-    # Upper centre: the trace sits low on the right, so the legend cannot
-    # collide with the C145 label there.
+    # OUTSIDE the axes. Inside, the legend's sample marker sits over the plot
+    # area and reads as a ninth data point, which is exactly how it was
+    # misread on first review.
     ax.legend(frameon=False, loc="upper center", fontsize=7,
-              bbox_to_anchor=(0.5, 1.02))
-    ax.set_xlim(-4, len(seq) + 6)          # headroom so C145 is not clipped
+              bbox_to_anchor=(0.5, -0.30), ncol=1, handletextpad=0.5)
+    ax.set_xlim(-4, len(seq) + 8)          # headroom so C145 is not clipped
     ax.set_ylim(min(scores) - 2.6, max(scores) + 0.6)
 
     fig.tight_layout()

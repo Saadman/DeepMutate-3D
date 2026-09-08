@@ -411,9 +411,11 @@ than improving only on easy assays. (B) Paired per-assay difference between
 and 71% of assays improve.
 
 **Figure 3. Sensitivity along the lysozyme C sequence.** Per-residue sensitivity
-for all 147 positions, with the eight cysteines forming the four UniProt-annotated
-disulfide bridges marked. They occupy ranks 1, 2, 3, 5, 6, 7, 8 and 10 of 147.
-The dashed line is the protein median.
+for all 147 positions under ESM-2 650M with masked marginals, with the eight
+cysteines forming the four UniProt-annotated disulfide bridges marked. They
+occupy ranks 1, 2, 3, 5, 6, 7, 8 and 10 of 147. Under wildtype marginals six of
+the eight fall in the ten most constrained positions. The dashed line is the
+protein median.
 
 ## 8. Availability
 
