@@ -337,11 +337,18 @@ hypothesis generation and must not inform diagnostic decisions.
 
 ## 6. Figures
 
-**Figure 1. Interface.** (A) Sensitivity heat map painted on the AlphaFold model
-of haemoglobin alpha, with the per-residue hover readout. (B) Per-residue
-sensitivity table, showing the most damaging and most tolerated substitution at
-each position. (C) Input controls and scan summary. Red indicates constrained
-positions, blue substitution-tolerant ones, with the neutral midpoint at zero.
+**Figure 1. The DeepMutate-3D interface**, scanning haemoglobin subunit alpha
+(UniProt P69905, 142 residues) with ESM-2 650M under masked-marginal scoring.
+(A) The complete interface: sequence and accession inputs, model and scoring
+controls, CSV and PDB downloads, and a summary reporting the device, model,
+inference time and the most constrained residues. The scan shown ran on
+dynamically allocated NVIDIA hardware in 3.99 s, 28.1 ms per residue.
+(B) The AlphaFold model painted by residue sensitivity, with the hover readout
+for H88, the proximal histidine that coordinates the haem iron. Red marks
+constrained positions and blue substitution-tolerant ones, with the neutral
+midpoint fixed at zero so colour is comparable between proteins.
+(C) The per-residue table, giving the sensitivity score, a categorical verdict,
+and the most damaging and most tolerated substitution at each position.
 
 **Figure 2. Effect of model size on ProteinGym.** (A) Empirical cumulative
 distribution of per-assay Spearman correlation for three ESM-2 sizes across 217
