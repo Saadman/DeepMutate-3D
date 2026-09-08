@@ -58,20 +58,20 @@
       "ms_per_residue": 0.429
     },
     {
-      "accession": "P0DTC2",
-      "name": "SARS-CoV-2 spike",
-      "length": 1022,
-      "mode": "Wildtype marginals (fast)",
-      "seconds": 0.426,
-      "ms_per_residue": 0.417
-    },
-    {
       "accession": "P04637",
       "name": "p53",
       "length": 393,
       "mode": "Masked marginals (accurate)",
       "seconds": 62.269,
       "ms_per_residue": 158.445
+    },
+    {
+      "accession": "P0DTC2",
+      "name": "SARS-CoV-2 spike",
+      "length": 1273,
+      "mode": "Wildtype marginals (fast)",
+      "seconds": 0.868,
+      "ms_per_residue": 0.682
     }
   ]
 }

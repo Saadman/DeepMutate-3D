@@ -233,12 +233,13 @@ calls to exclude allocation overhead.
 | --- | --- | --- | --- | --- | --- |
 | Haemoglobin alpha | 142 | wild-type | 0.41 s | 0.09 s | 0.18 s |
 | Haemoglobin alpha | 142 | masked | 30.98 s | 7.82 s | 1.45 s |
+| p53 | 393 | wild-type | 0.78 s | 0.18 s | 0.18 s |
 | p53 | 393 | masked | 236.19 s | 62.27 s | 10.99 s |
-| SARS-CoV-2 spike | 1,273 | wild-type | 3.50 s | 0.43 s | 0.31 s |
+| SARS-CoV-2 spike | 1,273 | wild-type | 3.50 s | 0.87 s | 0.31 s |
 | SARS-CoV-2 spike | 1,273 | masked | not run | not run | 152.33 s |
 
 Wild-type marginal scoring is fast on all hardware; the complete 1,273-residue
-spike protein is scored in under four seconds even on CPU. GPU acceleration
+spike protein is scored in 3.50 s on CPU and under a second on either GPU. GPU acceleration
 matters for masked marginal scoring, where it delivers a 5.4 to 5.7-fold
 speed-up at matched protein length and where the advantage grows with length
 because attention cost scales quadratically. On small jobs under the fast
