@@ -8,23 +8,17 @@ Correspondence: rashidsaadman@gmail.com
 
 ORCID: https://orcid.org/0000-0002-5179-5259
 
-Code: https://github.com/Saadman/DeepMutate-3D
-Web application: https://huggingface.co/spaces/ras1992/DeepMutate-3D
-
-**Keywords:** protein language model, variant effect prediction, deep mutational
-scanning, AlphaFold, structural bioinformatics, ESM-2, web application
-
----
 
 ## Abstract
 
-**Motivation.** Protein language models predict the functional effect of amino
-acid substitutions without training on experimental data, but their output is a
-table of numbers. The structural context that makes such a table interpretable,
-which residues sit in an active site, a buried core, or a flexible loop, lives
-in separate software. Bridging the two currently requires local installation,
-model weights and scripting, which places the method out of reach of many
-laboratory scientists.
+**Motivation.** Variant effect predictions are most interpretable when read
+against structure, and this is already available for human proteins: the
+AlphaFold database displays AlphaMissense pathogenicity as a residue-level heat
+map on the predicted fold [8], and proteome-wide language model predictions have
+been published with web portals [9]. Those resources are precomputed and
+human-restricted. A researcher working on a bacterial enzyme, a viral protein,
+an engineered construct or any non-human sequence has no equivalent, and must
+assemble model, structure and visualisation locally.
 
 **Results.** DeepMutate-3D scores all 19 possible substitutions at every
 position of a protein using ESM-2 log-likelihood ratios, condenses them into a
@@ -53,7 +47,6 @@ browser with no installation or account, on shared NVIDIA hardware. Source,
 validation scripts and all result files are at
 https://github.com/Saadman/DeepMutate-3D under Apache-2.0.
 
----
 
 ## 1. Introduction
 
@@ -81,12 +74,27 @@ accessibility: a scan that requires no installation, no model weights, and no
 scripting, returning a structure that can be rotated and interrogated residue by
 residue, together with exportable tables and coordinate files.
 
-Several established predictors address variant effect prediction, including
-alignment-based and language-model approaches evaluated in ProteinGym [5], and
-web servers exist for structure-based stability prediction. DeepMutate-3D does
-not compete with these on accuracy, and no head-to-head comparison against them
-is attempted here. Its distinction is the combination of zero-shot scoring,
-automatic structural mapping, and browser-based access with no installation.
+This combination is not new for human proteins. AlphaMissense [8] provides
+pathogenicity predictions for the human proteome, and the AlphaFold database
+renders them as an interactive residue-level heat map on the predicted
+structure, so a researcher studying a human gene can already obtain
+structure-contextualised variant scores in a browser. Brandes et al. [9]
+similarly published ESM1b predictions for all human missense variants through a
+web portal. Many further predictors are evaluated in ProteinGym [5].
+
+Three gaps remain, and they define what this tool is for. First, those resources
+are **human-restricted**: a bacterial enzyme, a viral protein or a plant protein
+has no precomputed equivalent, though AlphaFold models exist for essentially all
+of them. Second, they are **precomputed over catalogued sequences**, so an
+engineered construct, an isolate variant or any sequence not in the reference
+proteome cannot be scored at all. Third, AlphaMissense predictions are released
+under a non-commercial licence, whereas ESM-2 is MIT-licensed, which matters for
+industrial users and for redistribution.
+
+DeepMutate-3D therefore does not compete on accuracy with human-specific
+predictors, and no head-to-head comparison is attempted here. It extends
+structure-contextualised, browser-based variant scanning to any protein with an
+AlphaFold model or any sequence a user supplies, under a permissive licence.
 
 Because the tool wraps an established method, its value depends on the wrapper
 being faithful. This note therefore reports validation on two independent
@@ -468,3 +476,7 @@ Hugging Face Spaces.
 6\. Rego N, Koes D. 3Dmol.js: molecular visualization with WebGL. *Bioinformatics* 31(8):1322-1324 (2015).
 
 7\. The UniProt Consortium. UniProt: the Universal Protein Knowledgebase in 2025. *Nucleic Acids Research* 53(D1):D609-D617 (2025).
+
+8\. Cheng J, Novati G, Pan J, et al. Accurate proteome-wide missense variant effect prediction with AlphaMissense. *Science* 381(6664):eadg7492 (2023).
+
+9\. Brandes N, Goldman G, Wang CH, Ye CJ, Ntranos V. Genome-wide prediction of disease variant effects with a deep protein language model. *Nature Genetics* 55:1512-1522 (2023).
