@@ -56,3 +56,6 @@ validation/data/
 # Unused logo variants (only images/DeepMutate-3D/1.png is the source)
 images/logo_DM_1/
 images/DeepMutate-3D/2.png
+
+# Logo source artwork is kept locally; published assets live in docs/assets
+images/DeepMutate-3D_light.zip

@@ -957,8 +957,7 @@ with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
             '<div class="dm-header">'
             '<h1 style="margin:0 0 8px">'
             f'<img src="{LOGO_DATA_URI}" alt="DeepMutate-3D" '
-            'style="max-width:340px;width:100%;height:auto;border-radius:8px;'
-            'display:block"></h1>'
+            'style="max-width:340px;width:100%;height:auto;display:block"></h1>'
             '<p class="dm-tagline">Protein language model mutation scanning, '
             "painted onto the AlphaFold fold.</p>"
             "</div>"
