@@ -1024,14 +1024,21 @@ with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
                 label="Model",
                 info="Larger models score better but cost more compute.",
             )
+            # Wildtype marginals is the default: benchmarking put it within
+            # 0.007 mean Spearman of masked marginals for a fraction of the
+            # compute, and an unauthenticated visitor has only two GPU-minutes
+            # a day, which one large masked scan would exhaust.
             mode_radio = gr.Radio(
                 choices=[
-                    "Masked marginals (accurate)",
                     "Wildtype marginals (fast)",
+                    "Masked marginals (accurate)",
                 ],
-                value="Masked marginals (accurate)",
+                value="Wildtype marginals (fast)",
                 label="Scoring mode",
-                info="Masked marginals runs one forward pass per residue.",
+                info=(
+                    "Wildtype marginals uses one pass per window and is nearly "
+                    "as accurate. Masked marginals runs one pass per residue."
+                ),
             )
 
     scan_button = gr.Button(
