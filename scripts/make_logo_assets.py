@@ -33,8 +33,13 @@ HEADER_CSS_WIDTH = 340
 BANNER_CSS_WIDTH = 620
 
 
-def content_box(rgb: np.ndarray, background: np.ndarray, pad: int = 40) -> tuple:
-    """Bounding box of everything meaningfully different from the backdrop."""
+def content_box(rgb: np.ndarray, background: np.ndarray, pad: int = 0) -> tuple:
+    """Bounding box of everything meaningfully different from the backdrop.
+
+    `pad` defaults to 0 deliberately. Padding baked into a transparent asset is
+    invisible but still occupies layout width, which indents the artwork
+    relative to the text beneath it.
+    """
     diff = np.abs(rgb.astype(int) - background.astype(int)).sum(axis=2)
     ys, xs = np.where(diff > 30)
     h, w, _ = rgb.shape
@@ -79,9 +84,11 @@ def main() -> int:
     # The dark artwork sits on near-black, so brightness alone finds the content.
     lum = np.array(dark_src).sum(axis=2)
     ys, xs = np.where(lum > 120)
-    dark = dark_src.crop((max(int(xs.min()) - 40, 0), max(int(ys.min()) - 40, 0),
-                          min(int(xs.max()) + 40, dark_src.width),
-                          min(int(ys.max()) + 40, dark_src.height)))
+    # The dark variant keeps a small margin: its backdrop is opaque, so the
+    # padding reads as part of the panel rather than as dead space.
+    dark = dark_src.crop((max(int(xs.min()) - 30, 0), max(int(ys.min()) - 30, 0),
+                          min(int(xs.max()) + 30, dark_src.width),
+                          min(int(ys.max()) + 30, dark_src.height)))
 
     written = []
     for name, img, width in [

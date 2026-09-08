@@ -916,14 +916,25 @@ preload_model()
 
 
 CSS = f"""
-.dm-header {{ margin: 2px 0 10px; }}
+.dm-header {{ margin: 2px 0 14px; }}
+.dm-header h1 {{ margin: 0 0 10px; }}
+.dm-header h1 img {{
+    max-width: 340px;
+    width: 100%;
+    height: auto;
+    display: block;
+}}
 .dm-tagline {{
-    margin: 0;
+    margin: 0 0 10px;
     font-size: 15px;
     font-weight: 600;
     line-height: 1.35;
 }}
-.dm-intro p {{ max-width: 74ch; }}
+.dm-intro {{
+    margin: 0;
+    max-width: 74ch;
+    line-height: 1.55;
+}}
 .dm-inline-action {{ align-self: flex-end; margin-bottom: 0; }}
 body, .gradio-container, .gradio-container * {{
     font-family: {FONT_STACK} !important;
@@ -946,39 +957,34 @@ BLOCKS_KWARGS = {} if _LAUNCH_ACCEPTS_THEME else {"theme": _THEME, "css": CSS}
 
 
 with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
-    # One header block, left-aligned to match every other element on the page.
-    # The logo carries the wordmark, so it IS the heading rather than sitting
-    # above a duplicate text title; wrapping it in an <h1> with alt text keeps
-    # the document outline a screen reader expects while the name appears once
-    # on screen. The tagline sits immediately beneath it on the same left edge,
-    # so the two read as a single unit instead of two competing axes.
-    if LOGO_DATA_URI:
-        gr.HTML(
-            '<div class="dm-header">'
-            '<h1 style="margin:0 0 8px">'
-            f'<img src="{LOGO_DATA_URI}" alt="DeepMutate-3D" '
-            'style="max-width:340px;width:100%;height:auto;display:block"></h1>'
-            '<p class="dm-tagline">Protein language model mutation scanning, '
-            "painted onto the AlphaFold fold.</p>"
-            "</div>"
-        )
-    else:
-        gr.Markdown(
-            "# DeepMutate-3D\n"
-            "**Protein language model mutation scanning, painted onto the "
-            "AlphaFold fold.**"
-        )
-
-    # The explanation of how to read the colours is guidance, not identity, so
-    # it is set below the header in muted body text rather than competing with
-    # the tagline for emphasis.
-    gr.Markdown(
+    # Logo, tagline and intro live in ONE html block. Splitting them across a
+    # gr.HTML and a gr.Markdown gave each its own container padding, so the
+    # three lines started at three different left edges. One block, one edge.
+    intro = (
         "ESM-2 scores every possible point mutation as a log-likelihood ratio "
         "against the wildtype residue. Positions the model refuses to change "
         "are evolutionarily constrained, likely structural or functional cores, "
-        "and glow **red**. Positions it happily swaps glow **blue**.",
-        elem_classes="dm-intro",
+        "and glow <strong>red</strong>. Positions it happily swaps glow "
+        "<strong>blue</strong>."
     )
+    if LOGO_DATA_URI:
+        gr.HTML(
+            '<div class="dm-header">'
+            '<h1><img src="' + LOGO_DATA_URI + '" alt="DeepMutate-3D"></h1>'
+            '<p class="dm-tagline">Protein language model mutation scanning, '
+            "painted onto the AlphaFold fold.</p>"
+            f'<p class="dm-intro">{intro}</p>'
+            "</div>"
+        )
+    else:
+        gr.HTML(
+            '<div class="dm-header">'
+            "<h1>DeepMutate-3D</h1>"
+            '<p class="dm-tagline">Protein language model mutation scanning, '
+            "painted onto the AlphaFold fold.</p>"
+            f'<p class="dm-intro">{intro}</p>'
+            "</div>"
+        )
 
     with gr.Row(equal_height=True):
         example_dropdown = gr.Dropdown(
