@@ -89,8 +89,15 @@ def main() -> int:
     markdown = with_figures(SRC.read_text())
 
     docx = HERE / "DeepMutate-3D_preprint.docx"
+    # bioRxiv recommends Times/Courier/Helvetica/Arial for reliable PDF
+    # conversion. Word's default theme uses Aptos and Consolas, so the build
+    # supplies a reference document with the fonts swapped.
+    extra = ["--standalone"]
+    reference = HERE / "reference.docx"
+    if reference.exists():
+        extra += ["--reference-doc", str(reference)]
     pypandoc.convert_text(markdown, "docx", format="markdown",
-                          outputfile=str(docx), extra_args=["--standalone"])
+                          outputfile=str(docx), extra_args=extra)
     print(f"  {docx.name:34s} {docx.stat().st_size // 1024} KB")
 
     html = pypandoc.convert_text(
