@@ -59,3 +59,7 @@ images/DeepMutate-3D/2.png
 
 # Logo source artwork is kept locally; published assets live in docs/assets
 images/DeepMutate-3D_light.zip
+
+# Built manuscript outputs (regenerate with paper/build_manuscript.py)
+paper/*.docx
+paper/*.html
