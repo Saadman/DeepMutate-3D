@@ -6,7 +6,7 @@ Independent Researcher, Cambridge, MA, USA
 
 Correspondence: rashidsaadman@gmail.com
 
-ORCID: (add before posting)
+ORCID: https://orcid.org/0000-0002-5179-5259
 
 Code: https://github.com/Saadman/DeepMutate-3D
 Web application: https://huggingface.co/spaces/ras1992/DeepMutate-3D
