@@ -938,15 +938,21 @@ BLOCKS_KWARGS = {} if _LAUNCH_ACCEPTS_THEME else {"theme": _THEME, "css": CSS}
 
 
 with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
+    # The logo already carries the wordmark, so it serves as the page heading
+    # rather than sitting above a duplicate text title. Wrapping it in an <h1>
+    # with alt text keeps the document structure a screen reader expects, while
+    # the name appears only once on screen. Without the asset we fall back to a
+    # plain text heading so the page is never left untitled.
     if LOGO_DATA_URI:
         gr.HTML(
-            '<div style="display:flex;justify-content:center;padding:4px 0 2px">'
+            '<h1 style="display:flex;justify-content:center;margin:4px 0 2px">'
             f'<img src="{LOGO_DATA_URI}" alt="DeepMutate-3D" '
             'style="max-width:420px;width:100%;height:auto;border-radius:10px">'
-            "</div>"
+            "</h1>"
         )
+    else:
+        gr.Markdown("# DeepMutate-3D")
     gr.Markdown(
-        "# DeepMutate-3D\n"
         "**Protein-language-model mutation scanning, painted onto the AlphaFold fold.**\n\n"
         "ESM-2 scores every possible point mutation as a log-likelihood ratio against "
         "the wildtype residue. Positions the model refuses to change are evolutionarily "

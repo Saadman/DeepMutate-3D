@@ -18,11 +18,9 @@ preload_from_hub:
   - facebook/esm2_t33_650M_UR50D
 ---
 
-<p align="center">
+<h1 align="center">
   <img src="docs/assets/logo-banner.png" alt="DeepMutate-3D" width="620">
-</p>
-
-<h1 align="center">DeepMutate-3D</h1>
+</h1>
 
 <p align="center">
   Predict the effect of every possible point mutation in a protein
