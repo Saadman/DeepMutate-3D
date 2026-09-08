@@ -94,6 +94,15 @@ be scored. Third, AlphaMissense predictions are released under a non-commercial
 licence, whereas ESM-2 is MIT-licensed, which matters for industrial use and for
 redistribution.
 
+These resources also answer a different question. AlphaMissense estimates the
+probability that a variant causes human disease, a clinical endpoint. Ranking
+positions by evolutionary constraint asks whether a residue tolerates
+substitution at all, which is the question behind mutagenesis design, library
+construction and functional site discovery. The two correlate but are not
+interchangeable: a substitution can be clinically benign while still disrupting
+an enzyme in vitro, and a residue can be constrained without any associated
+disease phenotype.
+
 One boundary should be stated plainly, because it follows from what the model
 estimates. ESM-2 will return a score for any amino acid string, but the quantity
 it estimates is evolutionary constraint inferred from UniRef50. The scores are
@@ -360,7 +369,10 @@ with a single control it remains suggestive rather than established.
 The tolerant end of the ranking carries no comparable external check. Positions
 reported as substitution-tolerant are the model's own output, and this work does
 not verify experimentally that they tolerate mutation. That claim awaits a
-prospective test.
+prospective test. Established stability predictors address a related but
+distinct question, the free energy change on substitution, and are the
+appropriate tool where thermodynamic stability rather than evolutionary
+tolerance is the target.
 
 ## 5. Operation
 
