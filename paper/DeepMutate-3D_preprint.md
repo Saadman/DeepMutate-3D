@@ -343,14 +343,15 @@ hypothesis generation and must not inform diagnostic decisions.
 controls, CSV and PDB downloads, and a summary reporting the device, model,
 inference time and the most constrained residues. The scan shown ran on
 dynamically allocated NVIDIA hardware in 3.99 s, 28.1 ms per residue.
-(B) The AlphaFold model painted by residue sensitivity, with the hover readout
+(B) The per-residue table, giving the sensitivity score, a categorical verdict,
+and the most damaging and most tolerated substitution at each position.
+(C) The AlphaFold model painted by residue sensitivity, with the hover readout
 for H88. UniProt annotates this position as the proximal haem b binding
 residue, and the scan ranks it third most constrained of 142 positions, in the
 top 2%, having seen only the sequence. Red marks constrained positions and blue
 substitution-tolerant ones, with the neutral midpoint fixed at zero so colour is
 comparable between proteins.
-(C) The per-residue table, giving the sensitivity score, a categorical verdict,
-and the most damaging and most tolerated substitution at each position.
+Panels B and C are laid out as the application presents them.
 
 **Figure 2. Effect of model size on ProteinGym.** (A) Empirical cumulative
 distribution of per-assay Spearman correlation for three ESM-2 sizes across 217

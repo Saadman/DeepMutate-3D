@@ -5,6 +5,9 @@ Panels are captured separately at readable zoom rather than as one shrunken
 full-page shot, then assembled here. Each is placed at its native aspect ratio;
 nothing is stretched.
 
+Panel order follows the application's own layout, so the figure maps directly
+onto what a reader sees on screen.
+
     python paper/make_figure1.py
 """
 
@@ -41,9 +44,12 @@ def fit(img: Image.Image, width: int = None, height: int = None) -> Image.Image:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
+    # Panels are laid out in the order the app presents them, so a reader can
+    # map the figure onto the running interface: table on the left, structure
+    # on the right.
     a = Image.open(PANELS / "panelA_interface.png").convert("RGB")
-    b = Image.open(PANELS / "panelB_structure.png").convert("RGB")
-    c = Image.open(PANELS / "panelC_table.png").convert("RGB")
+    b = Image.open(PANELS / "panelB_table.png").convert("RGB")
+    c = Image.open(PANELS / "panelC_structure.png").convert("RGB")
 
     font = load_font(LABEL_PT)
     label_h = LABEL_PT + 14
