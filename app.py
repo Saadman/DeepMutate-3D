@@ -18,6 +18,23 @@ window, so there is no hard length limit.
 Runs on CUDA (Hugging Face ZeroGPU), Apple Silicon `mps`, or CPU. Weights are
 placed at import time as ZeroGPU expects; per-call tensors are built inside the
 `@spaces.GPU` context.
+
+Reading order
+-------------
+The file is one module because a Hugging Face Space expects a single `app.py`.
+It is organised in the order data flows through it:
+
+    Constants                  models, limits, API endpoints, fonts
+    Sequence handling          cleaning, validation, sliding windows
+    External biological APIs   UniProt sequences, AlphaFold structures
+    Core inference             the LLR computation, under @spaces.GPU
+    Per-residue detail         collapsing the LLR matrix for display
+    Structure painting         B-factor rewrite, py3Dmol viewer, hover
+    Downloadable exports       CSV and scored PDB
+    Gradio orchestration       scan() wires it together, then the layout
+
+The single most important function is `compute_sensitivity`; everything before
+it prepares its inputs and everything after it presents its output.
 """
 
 from __future__ import annotations
@@ -50,12 +67,18 @@ try:
 except ImportError:  # pragma: no cover - only hit in minimal local envs
 
     class _SpacesShim:
+        """Stand-in for the `spaces` library when it is not installed.
+
+        Mimics `spaces.GPU` in both spellings, bare `@spaces.GPU` and
+        `@spaces.GPU(duration=...)`, returning the function untouched.
+        """
+
         @staticmethod
         def GPU(*args, **kwargs):
             if args and callable(args[0]):
-                return args[0]
+                return args[0]           # used as @spaces.GPU
 
-            def _decorator(fn):
+            def _decorator(fn):          # used as @spaces.GPU(duration=...)
                 return fn
 
             return _decorator
@@ -195,6 +218,11 @@ def clean_sequence(raw: str) -> str:
 
 
 def validate_sequence(seq: str) -> Optional[str]:
+    """Return an error message if the sequence cannot be scored, else None.
+
+    Ambiguity codes (B, X, Z, J, U, O) are tolerated because ESM-2 has tokens
+    for them; anything else is a sign the input is not a protein sequence.
+    """
     if not seq:
         return "No protein sequence supplied."
     unknown = sorted(set(seq) - set(AMINO_ACIDS) - set("BXZJUO"))
@@ -426,6 +454,11 @@ def compute_sensitivity(
 # Per-residue detail derived from the LLR matrix
 # ---------------------------------------------------------------------------
 def verdict_for(score: float) -> str:
+    """Bin a sensitivity score into a plain-language label.
+
+    The thresholds are reading aids for the table, not calibrated cutoffs. The
+    continuous score is the real output.
+    """
     if score < -8.0:
         return "Critical"
     if score < -4.0:
@@ -640,6 +673,8 @@ def render_structure(
 
 
 def placeholder_panel(message: str) -> str:
+    """Grey dashed box shown where the 3D viewer would go, before a scan or
+    when no structure could be retrieved."""
     return (
         "<div style='display:flex;align-items:center;justify-content:center;"
         "height:520px;border:1px dashed #d1d5db;border-radius:8px;color:#6b7280;"
@@ -740,6 +775,11 @@ def load_example(choice: str):
 def build_table(
     sequence: str, scores: Sequence[float], details: Dict[int, dict]
 ) -> pd.DataFrame:
+    """One row per residue: score, verdict, and the extreme substitutions.
+
+    Column names here are also the headings the 3D hover readout uses, so the
+    two views describe values the same way.
+    """
     return pd.DataFrame(
         {
             "Pos": range(1, len(scores) + 1),
