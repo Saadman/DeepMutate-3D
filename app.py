@@ -916,7 +916,14 @@ preload_model()
 
 
 CSS = f"""
-.deepmutate-title h1 {{ margin-bottom: 4px; }}
+.dm-header {{ margin: 2px 0 10px; }}
+.dm-tagline {{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+}}
+.dm-intro p {{ max-width: 74ch; }}
 body, .gradio-container, .gradio-container * {{
     font-family: {FONT_STACK} !important;
 }}
@@ -938,27 +945,39 @@ BLOCKS_KWARGS = {} if _LAUNCH_ACCEPTS_THEME else {"theme": _THEME, "css": CSS}
 
 
 with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
-    # The logo already carries the wordmark, so it serves as the page heading
-    # rather than sitting above a duplicate text title. Wrapping it in an <h1>
-    # with alt text keeps the document structure a screen reader expects, while
-    # the name appears only once on screen. Without the asset we fall back to a
-    # plain text heading so the page is never left untitled.
+    # One header block, left-aligned to match every other element on the page.
+    # The logo carries the wordmark, so it IS the heading rather than sitting
+    # above a duplicate text title; wrapping it in an <h1> with alt text keeps
+    # the document outline a screen reader expects while the name appears once
+    # on screen. The tagline sits immediately beneath it on the same left edge,
+    # so the two read as a single unit instead of two competing axes.
     if LOGO_DATA_URI:
         gr.HTML(
-            '<h1 style="display:flex;justify-content:center;margin:4px 0 2px">'
+            '<div class="dm-header">'
+            '<h1 style="margin:0 0 8px">'
             f'<img src="{LOGO_DATA_URI}" alt="DeepMutate-3D" '
-            'style="max-width:420px;width:100%;height:auto;border-radius:10px">'
-            "</h1>"
+            'style="max-width:340px;width:100%;height:auto;border-radius:8px;'
+            'display:block"></h1>'
+            '<p class="dm-tagline">Protein language model mutation scanning, '
+            "painted onto the AlphaFold fold.</p>"
+            "</div>"
         )
     else:
-        gr.Markdown("# DeepMutate-3D")
+        gr.Markdown(
+            "# DeepMutate-3D\n"
+            "**Protein language model mutation scanning, painted onto the "
+            "AlphaFold fold.**"
+        )
+
+    # The explanation of how to read the colours is guidance, not identity, so
+    # it is set below the header in muted body text rather than competing with
+    # the tagline for emphasis.
     gr.Markdown(
-        "**Protein-language-model mutation scanning, painted onto the AlphaFold fold.**\n\n"
-        "ESM-2 scores every possible point mutation as a log-likelihood ratio against "
-        "the wildtype residue. Positions the model refuses to change are evolutionarily "
-        "constrained, likely structural or functional cores, and glow **red**. "
-        "Positions it happily swaps glow **blue**.",
-        elem_classes="deepmutate-title",
+        "ESM-2 scores every possible point mutation as a log-likelihood ratio "
+        "against the wildtype residue. Positions the model refuses to change "
+        "are evolutionarily constrained, likely structural or functional cores, "
+        "and glow **red**. Positions it happily swaps glow **blue**.",
+        elem_classes="dm-intro",
     )
 
     with gr.Row():
