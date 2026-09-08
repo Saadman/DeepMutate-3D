@@ -337,14 +337,23 @@ hypothesis generation and must not inform diagnostic decisions.
 
 ## 6. Figures
 
-Figure 1. Interface overview: sensitivity heat map on the AlphaFold model of
-haemoglobin alpha, with the hover readout and per-residue table.
+**Figure 1. Interface.** (A) Sensitivity heat map painted on the AlphaFold model
+of haemoglobin alpha, with the per-residue hover readout. (B) Per-residue
+sensitivity table, showing the most damaging and most tolerated substitution at
+each position. (C) Input controls and scan summary. Red indicates constrained
+positions, blue substitution-tolerant ones, with the neutral midpoint at zero.
 
-Figure 2. Model size ablation on ProteinGym (Table 1), with per-assay Spearman
-distributions for the three model sizes.
+**Figure 2. Effect of model size on ProteinGym.** (A) Empirical cumulative
+distribution of per-assay Spearman correlation for three ESM-2 sizes across 217
+assays. The distribution shifts uniformly rightward with model capacity rather
+than improving only on easy assays. (B) Paired per-assay difference between
+650M and 150M. Pairing removes between-assay variance; the mean gain is +0.041
+and 71% of assays improve.
 
-Figure 3. Lysozyme C coloured by sensitivity, with the four disulfide bridges
-highlighted.
+**Figure 3. Sensitivity along the lysozyme C sequence.** Per-residue sensitivity
+for all 147 positions, with the eight cysteines forming the four UniProt-annotated
+disulfide bridges marked. They occupy ranks 1, 2, 3, 5, 6, 7, 8 and 10 of 147.
+The dashed line is the protein median.
 
 ## 7. Availability
 
