@@ -17,9 +17,11 @@ AlphaFold database displays AlphaMissense pathogenicity as a residue-level heat
 map on the predicted fold [8], and proteome-wide language model predictions have
 been published with web portals [9]. Those resources are precomputed for the human proteome, and the
 AlphaMissense weights are not publicly released, so they cannot be applied to
-other organisms at all. A researcher working on a bacterial enzyme, a viral
-protein or an engineered variant of a natural protein has no equivalent and must
-assemble model, structure and visualisation locally.
+other organisms at all. AlphaFold models are available for essentially all of them, spanning over 214
+million sequences across UniProt [4], but no precomputed variant scores
+accompany those structures. A researcher working on a bacterial enzyme, a
+viral protein or an engineered variant must therefore assemble model,
+structure and visualisation themselves.
 
 **Results.** DeepMutate-3D scores all 19 possible substitutions at every
 position of a protein using ESM-2 log-likelihood ratios, condenses them into a
