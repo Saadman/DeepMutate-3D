@@ -1,0 +1,19 @@
+---
+title: DeepMutate-3D
+emoji: 🧬
+colorFrom: red
+colorTo: blue
+sdk: gradio
+sdk_version: 5.50.0
+python_version: 3.12.12
+app_file: app.py
+pinned: false
+license: apache-2.0
+short_description: ESM-2 mutation scanning painted onto the AlphaFold 3D fold
+models:
+  - facebook/esm2_t33_650M_UR50D
+  - facebook/esm2_t30_150M_UR50D
+  - facebook/esm2_t12_35M_UR50D
+preload_from_hub:
+  - facebook/esm2_t33_650M_UR50D
+---
