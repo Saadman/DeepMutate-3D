@@ -924,6 +924,7 @@ CSS = f"""
     line-height: 1.35;
 }}
 .dm-intro p {{ max-width: 74ch; }}
+.dm-inline-action {{ align-self: flex-end; margin-bottom: 0; }}
 body, .gradio-container, .gradio-container * {{
     font-family: {FONT_STACK} !important;
 }}
@@ -980,21 +981,30 @@ with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
         elem_classes="dm-intro",
     )
 
-    with gr.Row():
+    with gr.Row(equal_height=True):
         example_dropdown = gr.Dropdown(
             choices=list(EXAMPLE_PROTEINS.keys()),
             value=list(EXAMPLE_PROTEINS.keys())[0],
             label="Example protein",
-            scale=3,
+            scale=4,
         )
-        load_button = gr.Button("Load sequence", variant="secondary", scale=1)
+        # scale=0 keeps the button at its natural width instead of stretching
+        # across a quarter of the page, and the wrapper class bottom-aligns it
+        # with the dropdown rather than with the dropdown's label.
+        load_button = gr.Button(
+            "Load sequence",
+            variant="secondary",
+            scale=0,
+            min_width=150,
+            elem_classes="dm-inline-action",
+        )
 
     with gr.Row():
         sequence_box = gr.Textbox(
             label="Protein sequence (FASTA or raw)",
             placeholder="MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF...\n"
             "Leave blank to auto-fetch from the UniProt ID.",
-            lines=8,
+            lines=6,
             scale=3,
         )
         with gr.Column(scale=1):
