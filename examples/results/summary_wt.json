@@ -1,0 +1,12 @@
+{
+  "model": "facebook/esm2_t33_650M_UR50D",
+  "mode": "Wildtype marginals (fast)",
+  "case1_tp53": {
+    "median_percentile": 93.4,
+    "in_top_decile": 4,
+    "protein_median_sensitivity": -5.49,
+    "permutation_p": 0.00044997750112494374,
+    "observed_median_sensitivity": -11.04
+  },
+  "case2_panel_median_percentile": 80.6
+}

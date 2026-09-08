@@ -1,0 +1,7 @@
+hotspot,sensitivity,verdict,constraint_percentile,worst_substitution,worst_llr
+R175,-11.15,Critical,93.9,R175D,-15.66
+G245,-12.82,Critical,98.5,G245W,-15.19
+R248,-12.96,Critical,99.0,R248D,-15.53
+R249,-7.68,Sensitive,70.9,R249P,-11.2
+R273,-10.94,Critical,92.9,R273D,-14.61
+R282,-9.83,Critical,88.5,R282P,-14.21

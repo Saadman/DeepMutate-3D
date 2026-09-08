@@ -247,93 +247,106 @@ allocation overhead of approximately one second dominates.
 
 ## 4. Worked examples
 
-Benchmarks establish that the scores are sound. These three examples show what
-they are for. Each opens with a question a researcher would actually ask, and
-each is checked against ground truth established independently of this work.
+Benchmarks establish that the scores are calibrated. These three examples test
+whether they answer questions a researcher would pose, each against ground
+truth established independently of this work.
 
-### 4.1 Which residues in my protein are worth mutating first?
+Both scoring modes are reported. This turns out to matter: Section 3.2 showed
+the two modes differ by only 0.007 mean Spearman on ProteinGym, yet they differ
+substantially here. Rank correlation across a whole deep mutational scan and
+recovery of a handful of functional residues are not the same task, and a
+benchmark that measures the first does not settle the second.
 
-*Case: TP53, the most frequently mutated gene in human cancer.*
+### 4.1 Prioritising positions for mutagenesis
 
 Tumour sequencing has identified six positions accounting for a large share of
-TP53 missense mutations. Scanning the sequence alone, without any cancer data,
-places those six at a median constraint percentile of 92.5, with a median
-sensitivity of -7.89 against a protein-wide median of -2.13. Against 20,000
-random six-position draws from the DNA-binding domain, where all six sit,
-p = 0.009. Drawing from the whole protein gives p = 0.0007, but that null is too
-permissive because TP53's disordered terminal regions are trivially
-unconstrained; the domain-restricted value is the one to cite.
+TP53 missense mutations. Scanning the sequence alone, with no cancer data,
+places those six at a median constraint percentile of 92.5 under masked
+marginals and 93.4 under wildtype marginals, with four of six in the most
+constrained tenth of the protein under either mode.
 
-**What this buys you.** For a gene with a hotspot catalogue, the tool recovers
-what is already known. For one without, the same ranking is a prioritised
-shortlist: which positions to include on a sequencing panel, or which variants
-to characterise functionally first.
+Against 20,000 random six-position draws from the DNA-binding domain, where all
+six hotspots lie, p = 0.009 (masked). Drawing from the whole protein gives
+p = 0.0007, but that null is too permissive: TP53's disordered terminal regions
+are trivially unconstrained, so the domain-restricted value is the one to cite.
 
-### 4.2 Where is the functional site in a protein nobody has characterised?
+For a gene with an established hotspot catalogue the tool recovers what is
+already known. For one without, the same ranking provides a prioritised
+shortlist for panel design or functional follow-up.
 
-*Case: a panel of six enzymes with curated UniProt active site annotations.*
+### 4.2 Locating functional sites in uncharacterised proteins
 
-Enzymes were selected before scoring on two criteria: curated active site or
-binding site annotations, and a length within the model context. No enzyme was
-examined and then discarded. Annotated residues reach a panel median constraint
-percentile of 86.8. Four of six reach p < 0.01 by permutation: TEM-1
-beta-lactamase (p = 0.0001), phosphoglycerate kinase 1 (p = 0.00005), GAPDH
-(p = 0.00015) and carbonic anhydrase 2 (p = 0.005). Two do not: lysozyme C,
-whose three annotated sites are too few for significance however well they rank,
-and cationic trypsin (p = 0.081), whose annotation set mixes substrate-binding
-with catalytic residues. Binding residues sit under weaker evolutionary
-constraint than catalytic ones, and that distinction is visible in the result.
+Six enzymes were selected before scoring on two criteria: curated UniProt active
+site or binding site annotations, and a length within the model context. No
+enzyme was examined and then discarded.
 
-**What this buys you.** For an uncharacterised protein with no structure paper
-behind it, the top-ranked positions are candidate functional sites, ordered, at
-the cost of one scan.
+| Mode | Panel median percentile | Enzymes at p < 0.01 |
+| --- | --- | --- |
+| Masked marginals | 86.8 | 4 of 6 |
+| Wildtype marginals | 80.6 | 3 of 6 |
 
-### 4.3 Which positions can I randomise without destroying the protein?
+Under masked marginals, TEM-1 beta-lactamase reaches p = 0.0001,
+phosphoglycerate kinase 1 p = 0.00005, GAPDH p = 0.00015 and carbonic anhydrase
+2 p = 0.005. Two enzymes fail in both modes. Lysozyme C has three annotated
+sites, too few for significance however well they rank. Cationic trypsin
+(p = 0.081 masked) has an annotation set mixing substrate-binding with catalytic
+residues, and binding residues sit under weaker evolutionary constraint than
+catalytic ones.
 
-*Case: lysozyme C, 147 residues.*
+Carbonic anhydrase 2 illustrates the mode dependence: significant under masked
+marginals (p = 0.005) but not under wildtype (p = 0.101). Users pursuing
+functional site discovery should select masked marginals rather than accept the
+default.
 
-Directed evolution and library design need the inverse question answered. Of the
-ten most constrained positions, eight are cysteines, and they are exactly the
-eight residues UniProt annotates as forming the protein's four disulfide bridges
-(C24-C145, C48-C133, C82-C98, C94-C112). Drawing ten positions at random from
-147, the probability of capturing all eight is 1.0e-11. The remaining two are a
-buried glycine and a conserved tryptophan in the substrate-binding cleft. The
-model received sequence alone: no structure, no annotation, no experimental data.
+### 4.3 Selecting positions for library design
 
-One qualification. Cysteines are constrained as a class, reaching a median
-constraint percentile of 96.6 in lysozyme and 90.2 in trypsin against a
+Directed evolution requires the inverse question answered: which positions
+tolerate substitution. Lysozyme C, 147 residues, provides a check at the
+constrained end, because UniProt annotates four disulfide bridges
+(C24-C145, C48-C133, C82-C98, C94-C112) whose eight cysteines should be
+essentially unsubstitutable.
+
+| Mode | Disulfide cysteines in the ten most constrained positions | Exact p |
+| --- | --- | --- |
+| Masked marginals | 8 of 8 | 1.0e-11 |
+| Wildtype marginals | 6 of 8 | 4.4e-07 |
+
+Under masked marginals the remaining two positions are a buried glycine and a
+conserved tryptophan in the substrate-binding cleft. The model received sequence
+alone: no structure, no annotation, no experimental data.
+
+One qualification applies. Cysteines are constrained as a class, reaching a
+median constraint percentile of 96.6 in lysozyme and 90.2 in trypsin against a
 non-cysteine median near 48, so part of this effect is generic rather than
-specific to disulfide bonding. A partial control is available in carbonic
-anhydrase 2, whose single cysteine forms no disulfide bond and reaches only the
-40.5 percentile, below the protein median. That suggests the model distinguishes
+specific to disulfide bonding. A partial control exists in carbonic anhydrase 2,
+whose single cysteine forms no disulfide bond and reaches only the 40.5
+percentile, below the protein median. This suggests the model distinguishes
 bonded from free cysteines rather than merely conserving the residue type, but
-with one control it remains suggestive rather than established.
+with a single control it remains suggestive rather than established.
 
-**What this buys you.** A library that randomises the tolerant positions and
-preserves the constrained ones wastes far fewer variants on dead protein. The
-tool reports both ends of the ranking, so both decisions come from one scan.
+The tolerant end of the ranking carries no comparable external check. Positions
+reported as substitution-tolerant are the model's own output, and this work does
+not verify experimentally that they tolerate mutation. That claim awaits a
+prospective test.
 
-## 5. Using the tool
+## 5. Operation
 
-A scan needs a UniProt accession. Leaving the sequence field empty retrieves the
-canonical sequence automatically, which also guarantees that scores and
-structure share residue numbering, the most common source of silent
-misalignment when the two are assembled by hand.
+A scan requires a UniProt accession. Leaving the sequence field empty retrieves
+the canonical sequence automatically, which guarantees that scores and structure
+share residue numbering; mismatched numbering is the most common source of
+silent error when the two are assembled by hand.
 
-Three outputs support three different workflows:
+Three outputs are produced. The interactive structure provides spatial context,
+with a hover readout giving each position's score, verdict and extreme
+substitutions. The per-residue table, exportable as CSV, provides the ranking
+for downstream prioritisation. The scored PDB carries sensitivity in the
+B-factor column, so it opens directly in PyMOL or ChimeraX and can be coloured
+with a single command, which is the path from a browser scan to a publication
+figure.
 
-- **The structure** answers "where is this residue, and what is near it". Hovering
-  reports the position's score, its verdict, and its most damaging and most
-  tolerated substitution, so a hypothesis about one residue can be formed without
-  leaving the page.
-- **The table** answers "give me the ranking". Exported as CSV, it feeds directly
-  into variant prioritisation or library design.
-- **The scored PDB** carries sensitivity in the B-factor column, so it opens in
-  PyMOL or ChimeraX and colours with a single command. That is the path from a
-  browser scan to a publication figure.
-
-Nothing is installed, no model weights are downloaded, and no account is
-required. A scan of a 142-residue protein completes in about four seconds.
+No installation, model download or account is required. A 142-residue protein
+completes in approximately four seconds. Detailed usage documentation is
+maintained with the source code rather than reproduced here.
 
 ## 6. Limitations
 

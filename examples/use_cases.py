@@ -30,8 +30,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 import app  # noqa: E402
 
 MODEL = "ESM-2 650M (most accurate)"
-MODE = "Masked marginals (accurate)"
+import os
+MODE = os.environ.get("DM_MODE", "Wildtype marginals (fast)")
 OUT = pathlib.Path(__file__).parent / "results"
+TAG = "masked" if "Masked" in MODE else "wt"
 
 # TP53 mutation hotspots from IARC/COSMIC tumour sequencing. These six account
 # for a large share of all TP53 missense mutations found in human cancers.
@@ -208,12 +210,12 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     print(f"model {MODEL} | mode {MODE} | device {app.resolve_device()}\n")
     tp53, tp53_summary = case1_tp53()
-    tp53.to_csv(OUT / "case1_tp53_hotspots.csv", index=False)
+    tp53.to_csv(OUT / f"case1_tp53_hotspots_{TAG}.csv", index=False)
     panel = case2_active_sites()
-    panel.to_csv(OUT / "case2_active_sites.csv", index=False)
+    panel.to_csv(OUT / f"case2_active_sites_{TAG}.csv", index=False)
     lyso = case3_engineering()
-    lyso.to_csv(OUT / "case3_lysozyme_positions.csv", index=False)
-    (OUT / "summary.json").write_text(json.dumps({
+    lyso.to_csv(OUT / f"case3_lysozyme_positions_{TAG}.csv", index=False)
+    (OUT / f"summary_{TAG}.json").write_text(json.dumps({
         "model": app.resolve_model(MODEL)[0], "mode": MODE,
         "case1_tp53": tp53_summary,
         "case2_panel_median_percentile":
