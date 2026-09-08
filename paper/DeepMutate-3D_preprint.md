@@ -50,6 +50,9 @@ browser with no installation or account, on shared NVIDIA hardware. Source,
 validation scripts and all result files are at
 https://github.com/Saadman/DeepMutate-3D under Apache-2.0.
 
+**Keywords:** protein language model, variant effect prediction, deep mutational
+scanning, AlphaFold, structural bioinformatics, ESM-2, web application
+
 
 ## 1. Introduction
 

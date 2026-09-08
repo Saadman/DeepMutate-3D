@@ -1,0 +1,49 @@
+bioRxiv submission fields for DeepMutate-3D
+
+ROUTING QUESTION            Biological research
+Manuscript type             New Results
+Subject category            Bioinformatics
+
+================================ TITLE ================================
+DeepMutate-3D: interactive protein language model mutation scanning on predicted structures
+
+================================ AUTHOR ===============================
+First name        Rashid
+Last name         Karim
+Email             rashidsaadman@gmail.com
+ORCID             0000-0002-5179-5259
+Institution       Independent Researcher
+City / Country    Cambridge, MA, USA
+Corresponding     yes (sole author)
+
+=============================== ABSTRACT ==============================
+Motivation. Variant effect predictions are most interpretable when read against structure, and this is already available for human proteins: the AlphaFold database displays AlphaMissense pathogenicity as a residue-level heat map on the predicted fold, and proteome-wide language model predictions have been published with web portals. Those resources are precomputed for the human proteome, and the AlphaMissense weights are not publicly released, so they cannot be applied to other organisms at all. AlphaFold models are available for essentially all of them, spanning over 214 million sequences across UniProt, but no precomputed variant scores accompany those structures. A researcher working on a bacterial enzyme, a viral protein or an engineered variant must therefore assemble model, structure and visualisation themselves.
+
+Results. DeepMutate-3D scores all 19 possible substitutions at every position of a protein using ESM-2 log-likelihood ratios, condenses them into a per-residue sensitivity score, retrieves the matching AlphaFold model, and paints the scores onto the structure as an interactive heat map in a web browser. Predictions are zero-shot. On the ProteinGym substitution benchmark (217 assays, 696,311 measured variants) it reaches a mean Spearman correlation of 0.425, within the range reported for ESM-2 650M. On 38,901 ClinVar variants across 2,011 proteins it separates pathogenic from benign substitutions with a mean per-protein AUROC of 0.881. Applied to proteins with independent ground truth, it places the six TP53 cancer hotspots among the most constrained positions of the DNA-binding domain (permutation p = 0.009) and ranks all eight cysteines of lysozyme C's four disulfide bridges within the ten most constrained of 147 positions (hypergeometric p = 1.0e-11).
+
+Two comparisons made during validation generalise beyond this tool. Increasing model capacity buys more than refining the scoring protocol: ESM-2 650M under single-pass scoring exceeds ESM-2 150M under per-residue masked scoring while using two orders of magnitude less computation. And benchmark rank correlation does not predict functional-site recovery: two scoring modes separated by 0.007 mean Spearman on ProteinGym differ markedly on the case studies, recovering eight versus six of the lysozyme disulfide cysteines.
+
+Availability. https://huggingface.co/spaces/ras1992/DeepMutate-3D runs in a browser with no installation or account, on shared NVIDIA hardware. Source, validation scripts and all result files are at https://github.com/Saadman/DeepMutate-3D under Apache-2.0.
+
+=============================== KEYWORDS ==============================
+protein language model, variant effect prediction, deep mutational scanning, AlphaFold, structural bioinformatics, ESM-2, web application
+
+================================ FILE =================================
+paper/DeepMutate-3D_preprint.docx
+Figures are embedded. No separate figure upload needed.
+
+========================= STANDARD QUESTIONS ==========================
+License                CC-BY 4.0
+Competing interests    None
+Funding                None (self-funded)
+Previously published   No
+Under consideration    No
+Clinical trial         No
+Human/animal subjects  No
+Journal transfer offer Decline
+
+Data availability
+  Code, validation scripts and all result files:
+    https://github.com/Saadman/DeepMutate-3D
+  Web application:
+    https://huggingface.co/spaces/ras1992/DeepMutate-3D
