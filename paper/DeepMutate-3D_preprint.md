@@ -350,40 +350,48 @@ maintained with the source code rather than reproduced here.
 
 ## 6. Limitations
 
-**The method is not novel.** Scoring is the established masked-marginal
-procedure of Meier et al. [2]. Section 3.1 reproduces rather than improves on
-published performance.
+The scoring method presented here is not novel. It is the established
+masked-marginal procedure of Meier et al. [2] applied to ESM-2, and Section 3.1
+reproduces rather than improves upon published performance. The contribution is
+integration and accessibility, and the validation exists to demonstrate that the
+wrapper is faithful to the underlying method, not to advance it.
 
-**ClinVar is an imperfect benchmark.** Pathogenic annotations are enriched in
-conserved functional domains and benign annotations in tolerant regions, which
-inflates apparent performance relative to prospective clinical use. Some ClinVar
-submissions also incorporate computational predictions, introducing partial
-circularity. The AUROC in Table 3 should be read as evidence that the score
-behaves sensibly on clinically annotated variation, not as an estimate of
-diagnostic accuracy.
+The benchmarks establish less than their headline figures suggest. ClinVar is an
+imperfect standard: pathogenic annotations are enriched in conserved functional
+domains and benign annotations in tolerant regions, which inflates apparent
+performance relative to prospective clinical use, and some submissions
+incorporate computational predictions, introducing partial circularity. The
+AUROC in Table 3 should therefore be read as evidence that the score behaves
+sensibly on clinically annotated variation, not as an estimate of diagnostic
+accuracy. Section 4 further shows that ProteinGym rank correlation does not
+predict functional-site recovery, since two scoring modes separated by 0.007
+mean Spearman differ substantially on the worked examples. Any single benchmark
+number should be treated as narrower evidence than it appears. Within the worked
+examples, only the constrained end of the ranking is externally validated;
+positions reported as substitution-tolerant are the model's own output, and no
+experiment in this work confirms that they tolerate mutation.
 
-**Designed proteins are out of scope.** Engineered fluorescent proteins score
-near zero at every model size. The method estimates evolutionary constraint, and
-sequences without evolutionary history have none to estimate.
+Two classes of protein are poorly served. Designed sequences with no
+evolutionary history, such as engineered fluorescent proteins, score near zero
+at every model size, which is expected because the method estimates
+evolutionary constraint and there is none to estimate. Fast-evolving viral
+surface proteins also scored near zero at 150M parameters, but influenza
+haemagglutinin recovers to rho 0.46 at 650M, so that failure reflected model
+capacity rather than a property of the approach and may recede further with
+larger models.
 
-**Model capacity limits some families.** Fast-evolving viral surface proteins
-scored near zero at 150M parameters, but influenza haemagglutinin recovers to
-rho 0.46 at 650M, indicating that this was a capacity limitation rather than a
-property of the approach.
+Three narrower caveats apply to interpretation. Averaging the 19 substitutions
+at a position discards direction, since a residue may tolerate conservative
+changes while forbidding drastic ones, which is why the interface also reports
+the extreme substitutions at each position. AlphaFold monomer models are used
+throughout, so residues that matter only within a complex are under-weighted.
+For proteins beyond 1,022 residues, scores depend marginally on where sliding
+window boundaries fall.
 
-**Averaging discards direction.** A position may tolerate conservative
-substitutions while forbidding drastic ones. The mean flattens this, which is
-why the interface also reports the extreme substitutions at each position.
-
-**Single chains only.** AlphaFold monomer models are used, so residues that
-matter only within a complex are under-weighted.
-
-**Window placement.** For proteins beyond 1,022 residues, scores depend
-marginally on where window boundaries fall.
-
-**Not a clinical tool.** The method predicts evolutionary constraint, which
-correlates with but is not identical to pathogenicity. It is intended for
-hypothesis generation and must not inform diagnostic decisions.
+Finally, and most importantly for anyone considering clinical application: this
+method predicts evolutionary constraint, which correlates with but is not
+identical to pathogenicity. DeepMutate-3D is a research tool for hypothesis
+generation and must not be used to inform diagnostic or treatment decisions.
 
 ## 7. Figures
 
