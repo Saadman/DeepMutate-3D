@@ -129,8 +129,8 @@ The predicted structure is retrieved from the AlphaFold Protein Structure
 Database [4] by UniProt accession, queried through the prediction API so that
 the current model version is used rather than a hard-coded filename. Sensitivity
 scores are written into the B-factor column of the PDB record, replacing pLDDT,
-which allows 3Dmol.js to colour the cartoon representation by a numeric property
-without server-side rendering. The colour scale is a red-white-blue gradient with
+which allows 3Dmol.js [6] to colour the cartoon representation by a numeric
+property without server-side rendering. The colour scale is a red-white-blue gradient with
 symmetric limits, placing the neutral midpoint at exactly zero so that colour is
 comparable across proteins. Exported coordinate files carry REMARK records
 documenting that the B-factor column no longer contains pLDDT.
@@ -332,8 +332,8 @@ prospective test.
 ## 5. Operation
 
 A scan requires a UniProt accession. Leaving the sequence field empty retrieves
-the canonical sequence automatically, which guarantees that scores and structure
-share residue numbering; mismatched numbering is the most common source of
+the canonical sequence from UniProt [7] automatically, which guarantees that
+scores and structure share residue numbering; mismatched numbering is the most common source of
 silent error when the two are assembled by hand.
 
 Three outputs are produced. The interactive structure provides spatial context,
@@ -435,10 +435,16 @@ Hugging Face Spaces.
 
 ## References
 
-1. Lin Z, Akin H, Rao R, et al. Evolutionary-scale prediction of atomic-level protein structure with a language model. *Science* 379:1123-1130 (2023).
-2. Meier J, Rao R, Verkuil R, et al. Language models enable zero-shot prediction of the effects of mutations on protein function. *Advances in Neural Information Processing Systems* 34 (2021).
-3. Jumper J, Evans R, Pritzel A, et al. Highly accurate protein structure prediction with AlphaFold. *Nature* 596:583-589 (2021).
-4. Varadi M, Bertoni D, Magana P, et al. AlphaFold Protein Structure Database in 2024: providing structure coverage for over 214 million protein sequences. *Nucleic Acids Research* 52:D368-D375 (2024).
-5. Notin P, Kollasch A, Ritter D, et al. ProteinGym: large-scale benchmarks for protein fitness prediction and design. *Advances in Neural Information Processing Systems* 36 (2023).
-6. Rego N, Koes D. 3Dmol.js: molecular visualization with WebGL. *Bioinformatics* 31:1322-1324 (2015).
-7. The UniProt Consortium. UniProt: the Universal Protein Knowledgebase in 2025. *Nucleic Acids Research* 53:D609-D617 (2025).
+1\. Lin Z, Akin H, Rao R, et al. Evolutionary-scale prediction of atomic-level protein structure with a language model. *Science* 379(6637):1123-1130 (2023).
+
+2\. Meier J, Rao R, Verkuil R, et al. Language models enable zero-shot prediction of the effects of mutations on protein function. *Advances in Neural Information Processing Systems* 34:29287-29303 (2021).
+
+3\. Jumper J, Evans R, Pritzel A, et al. Highly accurate protein structure prediction with AlphaFold. *Nature* 596(7873):583-589 (2021).
+
+4\. Varadi M, Bertoni D, Magana P, et al. AlphaFold Protein Structure Database in 2024: providing structure coverage for over 214 million protein sequences. *Nucleic Acids Research* 52(D1):D368-D375 (2024).
+
+5\. Notin P, Kollasch A, Ritter D, et al. ProteinGym: large-scale benchmarks for protein fitness prediction and design. *Advances in Neural Information Processing Systems* 36 (2023).
+
+6\. Rego N, Koes D. 3Dmol.js: molecular visualization with WebGL. *Bioinformatics* 31(8):1322-1324 (2015).
+
+7\. The UniProt Consortium. UniProt: the Universal Protein Knowledgebase in 2025. *Nucleic Acids Research* 53(D1):D609-D617 (2025).
