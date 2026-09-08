@@ -1,0 +1,10 @@
+{
+  "model": "facebook/esm2_t33_650M_UR50D",
+  "mode": "Masked marginals (accurate)",
+  "case1_tp53": {
+    "median_percentile": 92.5,
+    "in_top_decile": 4,
+    "protein_median_sensitivity": -2.13
+  },
+  "case2_panel_median_percentile": 86.85
+}
