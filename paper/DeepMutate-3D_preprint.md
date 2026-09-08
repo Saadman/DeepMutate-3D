@@ -6,8 +6,13 @@ Independent Researcher, Cambridge, MA, USA
 
 Correspondence: rashidsaadman@gmail.com
 
+ORCID: (add before posting)
+
 Code: https://github.com/Saadman/DeepMutate-3D
 Web application: https://huggingface.co/spaces/ras1992/DeepMutate-3D
+
+**Keywords:** protein language model, variant effect prediction, deep mutational
+scanning, AlphaFold, structural bioinformatics, ESM-2, web application
 
 ---
 
@@ -215,54 +220,9 @@ question: given the variants observed in one gene, which are most likely to be
 damaging. Raw scores are not comparable between proteins, so pooled analysis
 requires per-protein standardisation; the pooled figure is lower than the mean
 per-protein figure because pooling mixes proteins of differing discriminability.
-Section 5 discusses the limitations of ClinVar as a benchmark.
+Section 6 discusses the limitations of ClinVar as a benchmark.
 
-### 3.4 Case studies
-
-**TP53 cancer hotspots.** The six most frequently mutated positions in TP53
-across human tumours have a median sensitivity of -7.89 against a protein-wide
-median of -2.13, and a median constraint percentile of 92.5. Against 20,000
-random six-position draws from the whole protein, p = 0.0007.
-
-That null is however too permissive, because TP53 carries long disordered
-terminal regions that are trivially unconstrained, and all six hotspots lie
-within the DNA-binding domain. Restricting the null to that domain
-(residues 94 to 292, median sensitivity -3.74) gives p = 0.009. The effect
-survives the stricter test, but is an order of magnitude weaker than the
-whole-protein comparison implies, and the restricted value is the one that
-should be cited.
-
-**Enzyme active sites.** Six enzymes were selected before scoring on two
-criteria: the presence of curated UniProt active site or binding site
-annotations, and a length within the model context so that no windowing was
-required. No enzyme was examined and then discarded. Across the panel,
-annotated residues reach a median constraint percentile of 86.8. Four of six enzymes reach p < 0.01 by permutation
-(TEM-1 beta-lactamase p = 0.0001, phosphoglycerate kinase 1 p = 0.00005,
-GAPDH p = 0.00015, carbonic anhydrase 2 p = 0.005). Two do not: lysozyme C
-(three annotated sites, insufficient for significance) and cationic trypsin
-(p = 0.081), whose annotation set mixes substrate-binding with catalytic
-residues. Binding residues are under weaker evolutionary constraint than
-catalytic ones, and this distinction is visible in the result.
-
-**Lysozyme disulfide bridges.** Of the ten most constrained positions in
-lysozyme C, eight are cysteines, and they are exactly the eight residues UniProt
-annotates as forming the protein's four disulfide bridges (C24-C145, C48-C133,
-C82-C98, C94-C112). Drawing ten positions at random from 147, the probability of
-capturing all eight is 1.0e-11. The remaining two positions are a buried glycine
-and a conserved tryptophan in the substrate-binding cleft. The model received
-sequence alone, with no structure, no annotation, and no experimental data.
-
-This result requires one qualification. Cysteines are constrained as a class:
-across the panel, cysteine positions reach a median constraint percentile of
-96.6 in lysozyme and 90.2 in trypsin against a non-cysteine median near 48, so
-part of the effect is generic rather than specific to disulfide bonding. A
-partial control is available in carbonic anhydrase 2, whose single cysteine does
-not participate in a disulfide bond and reaches only the 40.5 percentile, below
-the protein median. This suggests the model distinguishes bonded from free
-cysteines rather than merely conserving the residue type, but with a single
-control this remains suggestive rather than established.
-
-### 3.5 Runtime
+### 3.4 Runtime
 
 **Table 4.** Inference time, ESM-2 650M, identical proteins. CPU and Apple
 Silicon measured on an Apple M3 (6 threads for CPU); NVIDIA figures from
@@ -285,20 +245,97 @@ because attention cost scales quadratically. On small jobs under the fast
 protocol, dynamically allocated GPUs are slower than a laptop, because a fixed
 allocation overhead of approximately one second dominates.
 
-## 4. Use
+## 4. Worked examples
 
-A scan requires a UniProt accession. Leaving the sequence field empty causes the
-canonical sequence to be retrieved automatically, which guarantees that scores
-and structure share residue numbering. Outputs are an interactive structure, a
-per-residue table with the most damaging and most tolerated substitution at each
-position, and CSV and PDB downloads.
+Benchmarks establish that the scores are sound. These three examples show what
+they are for. Each opens with a question a researcher would actually ask, and
+each is checked against ground truth established independently of this work.
 
-Typical applications are prioritising positions for mutagenesis, identifying
-candidate functional sites in uncharacterised proteins, selecting tolerant
-positions for library design, and providing structural context for variants of
-uncertain significance.
+### 4.1 Which residues in my protein are worth mutating first?
 
-## 5. Limitations
+*Case: TP53, the most frequently mutated gene in human cancer.*
+
+Tumour sequencing has identified six positions accounting for a large share of
+TP53 missense mutations. Scanning the sequence alone, without any cancer data,
+places those six at a median constraint percentile of 92.5, with a median
+sensitivity of -7.89 against a protein-wide median of -2.13. Against 20,000
+random six-position draws from the DNA-binding domain, where all six sit,
+p = 0.009. Drawing from the whole protein gives p = 0.0007, but that null is too
+permissive because TP53's disordered terminal regions are trivially
+unconstrained; the domain-restricted value is the one to cite.
+
+**What this buys you.** For a gene with a hotspot catalogue, the tool recovers
+what is already known. For one without, the same ranking is a prioritised
+shortlist: which positions to include on a sequencing panel, or which variants
+to characterise functionally first.
+
+### 4.2 Where is the functional site in a protein nobody has characterised?
+
+*Case: a panel of six enzymes with curated UniProt active site annotations.*
+
+Enzymes were selected before scoring on two criteria: curated active site or
+binding site annotations, and a length within the model context. No enzyme was
+examined and then discarded. Annotated residues reach a panel median constraint
+percentile of 86.8. Four of six reach p < 0.01 by permutation: TEM-1
+beta-lactamase (p = 0.0001), phosphoglycerate kinase 1 (p = 0.00005), GAPDH
+(p = 0.00015) and carbonic anhydrase 2 (p = 0.005). Two do not: lysozyme C,
+whose three annotated sites are too few for significance however well they rank,
+and cationic trypsin (p = 0.081), whose annotation set mixes substrate-binding
+with catalytic residues. Binding residues sit under weaker evolutionary
+constraint than catalytic ones, and that distinction is visible in the result.
+
+**What this buys you.** For an uncharacterised protein with no structure paper
+behind it, the top-ranked positions are candidate functional sites, ordered, at
+the cost of one scan.
+
+### 4.3 Which positions can I randomise without destroying the protein?
+
+*Case: lysozyme C, 147 residues.*
+
+Directed evolution and library design need the inverse question answered. Of the
+ten most constrained positions, eight are cysteines, and they are exactly the
+eight residues UniProt annotates as forming the protein's four disulfide bridges
+(C24-C145, C48-C133, C82-C98, C94-C112). Drawing ten positions at random from
+147, the probability of capturing all eight is 1.0e-11. The remaining two are a
+buried glycine and a conserved tryptophan in the substrate-binding cleft. The
+model received sequence alone: no structure, no annotation, no experimental data.
+
+One qualification. Cysteines are constrained as a class, reaching a median
+constraint percentile of 96.6 in lysozyme and 90.2 in trypsin against a
+non-cysteine median near 48, so part of this effect is generic rather than
+specific to disulfide bonding. A partial control is available in carbonic
+anhydrase 2, whose single cysteine forms no disulfide bond and reaches only the
+40.5 percentile, below the protein median. That suggests the model distinguishes
+bonded from free cysteines rather than merely conserving the residue type, but
+with one control it remains suggestive rather than established.
+
+**What this buys you.** A library that randomises the tolerant positions and
+preserves the constrained ones wastes far fewer variants on dead protein. The
+tool reports both ends of the ranking, so both decisions come from one scan.
+
+## 5. Using the tool
+
+A scan needs a UniProt accession. Leaving the sequence field empty retrieves the
+canonical sequence automatically, which also guarantees that scores and
+structure share residue numbering, the most common source of silent
+misalignment when the two are assembled by hand.
+
+Three outputs support three different workflows:
+
+- **The structure** answers "where is this residue, and what is near it". Hovering
+  reports the position's score, its verdict, and its most damaging and most
+  tolerated substitution, so a hypothesis about one residue can be formed without
+  leaving the page.
+- **The table** answers "give me the ranking". Exported as CSV, it feeds directly
+  into variant prioritisation or library design.
+- **The scored PDB** carries sensitivity in the B-factor column, so it opens in
+  PyMOL or ChimeraX and colours with a single command. That is the path from a
+  browser scan to a publication figure.
+
+Nothing is installed, no model weights are downloaded, and no account is
+required. A scan of a 142-residue protein completes in about four seconds.
+
+## 6. Limitations
 
 **The method is not novel.** Scoring is the established masked-marginal
 procedure of Meier et al. [2]. Section 3.1 reproduces rather than improves on
@@ -335,7 +372,7 @@ marginally on where window boundaries fall.
 correlates with but is not identical to pathogenicity. It is intended for
 hypothesis generation and must not inform diagnostic decisions.
 
-## 6. Figures
+## 7. Figures
 
 **Figure 1. The DeepMutate-3D interface**, scanning haemoglobin subunit alpha
 (UniProt P69905, 142 residues) with ESM-2 650M under masked-marginal scoring.
@@ -365,7 +402,7 @@ for all 147 positions, with the eight cysteines forming the four UniProt-annotat
 disulfide bridges marked. They occupy ranks 1, 2, 3, 5, 6, 7, 8 and 10 of 147.
 The dashed line is the protein median.
 
-## 7. Availability
+## 8. Availability
 
 Source code, validation scripts, and all result files are at
 https://github.com/Saadman/DeepMutate-3D under Apache-2.0. The web application

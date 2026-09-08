@@ -95,7 +95,7 @@ def main() -> int:
 
     html = pypandoc.convert_text(
         markdown, "html5", format="markdown",
-        extra_args=["--standalone", "--metadata", "title=DeepMutate-3D",
+        extra_args=["--standalone", "--metadata", "pagetitle=DeepMutate-3D",
                     "--css=inline"])
     html = html.replace('<link rel="stylesheet" href="inline" />',
                         f"<style>{PRINT_CSS}</style>")
