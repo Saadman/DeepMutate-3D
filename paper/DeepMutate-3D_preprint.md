@@ -15,9 +15,10 @@ ORCID: https://orcid.org/0000-0002-5179-5259
 against structure, and this is already available for human proteins: the
 AlphaFold database displays AlphaMissense pathogenicity as a residue-level heat
 map on the predicted fold [8], and proteome-wide language model predictions have
-been published with web portals [9]. Those resources are precomputed and
-human-restricted. A researcher working on a bacterial enzyme, a viral protein,
-an engineered construct or any non-human sequence has no equivalent, and must
+been published with web portals [9]. Those resources are precomputed for the human proteome, and the
+AlphaMissense weights are not publicly released, so they cannot be applied to
+other organisms at all. A researcher working on a bacterial enzyme, a viral
+protein or an engineered variant of a natural protein has no equivalent and must
 assemble model, structure and visualisation locally.
 
 **Results.** DeepMutate-3D scores all 19 possible substitutions at every
@@ -83,18 +84,30 @@ similarly published ESM1b predictions for all human missense variants through a
 web portal. Many further predictors are evaluated in ProteinGym [5].
 
 Three gaps remain, and they define what this tool is for. First, those resources
-are **human-restricted**: a bacterial enzyme, a viral protein or a plant protein
-has no precomputed equivalent, though AlphaFold models exist for essentially all
-of them. Second, they are **precomputed over catalogued sequences**, so an
-engineered construct, an isolate variant or any sequence not in the reference
-proteome cannot be scored at all. Third, AlphaMissense predictions are released
-under a non-commercial licence, whereas ESM-2 is MIT-licensed, which matters for
-industrial users and for redistribution.
+cover the human proteome only. The AlphaMissense trained weights are not
+publicly released, so the method cannot be applied to another organism even in
+principle, although AlphaFold models exist for essentially all of them. ESM-2 is
+distributed with open weights and runs on any input. Second, the human
+predictions are precomputed over reference gene models, so an isolate variant,
+a laboratory construct or any sequence absent from the reference proteome cannot
+be scored. Third, AlphaMissense predictions are released under a non-commercial
+licence, whereas ESM-2 is MIT-licensed, which matters for industrial use and for
+redistribution.
+
+One boundary should be stated plainly, because it follows from what the model
+estimates. ESM-2 will return a score for any amino acid string, but the quantity
+it estimates is evolutionary constraint inferred from UniRef50. The scores are
+therefore informative for natural proteins from any organism, and for engineered
+variants of natural proteins, which retain their family's evolutionary signal.
+They are not informative for de novo designed sequences with no evolutionary
+relatives, and Section 6 reports that such sequences score near zero at every
+model size. The extension offered here is across organisms and across sequences
+related to natural proteins, not across arbitrary strings.
 
 DeepMutate-3D therefore does not compete on accuracy with human-specific
 predictors, and no head-to-head comparison is attempted here. It extends
-structure-contextualised, browser-based variant scanning to any protein with an
-AlphaFold model or any sequence a user supplies, under a permissive licence.
+structure-contextualised, browser-based variant scanning to natural proteins of
+any organism and to variants of them, under a permissive licence.
 
 Because the tool wraps an established method, its value depends on the wrapper
 being faithful. This note therefore reports validation on two independent
