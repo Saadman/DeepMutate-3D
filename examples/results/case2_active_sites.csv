@@ -1,7 +1,7 @@
-protein,accession,length,n_annotated_sites,median_percentile,frac_in_top_decile
-TEM-1 beta-lactamase,P62593,286,4,97.8,1.0
-Cationic trypsin,P00760,246,7,73.9,0.43
-Lysozyme C,P00698,147,3,83.6,0.33
-Carbonic anhydrase 2,P00918,260,8,79.5,0.5
-GAPDH,P04406,335,8,91.2,0.5
-Phosphoglycerate kinase 1,P00558,417,29,90.1,0.52
+protein,accession,length,n_annotated_sites,median_percentile,frac_in_top_decile,permutation_p
+TEM-1 beta-lactamase,P62593,286,4,97.8,1.0,0.0001
+Cationic trypsin,P00760,246,7,73.9,0.43,0.080846
+Lysozyme C,P00698,147,3,83.6,0.33,0.074296
+Carbonic anhydrase 2,P00918,260,8,79.5,0.5,0.0049
+GAPDH,P04406,335,8,91.2,0.5,0.00015
+Phosphoglycerate kinase 1,P00558,417,29,90.1,0.52,5e-05

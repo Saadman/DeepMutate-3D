@@ -20,6 +20,8 @@ import json
 import pathlib
 import sys
 
+import math
+
 import numpy as np
 import pandas as pd
 import requests
@@ -46,6 +48,33 @@ ENZYME_PANEL = [
 ]
 
 FUNCTIONAL_FEATURES = {"Active site", "Binding site", "Site"}
+
+
+def permutation_p(scores, positions, n_perm=20000, seed=0):
+    """How often would a random set of the same size look this constrained?
+
+    Compares the observed median sensitivity of `positions` against the median
+    of random position sets drawn from the same protein. This is the null model
+    the percentile numbers on their own do not provide.
+    """
+    rng = np.random.default_rng(seed)
+    arr = np.asarray(scores, dtype=float)
+    observed = float(np.median(arr[[p - 1 for p in positions]]))
+    k = len(positions)
+    draws = np.array([np.median(rng.choice(arr, size=k, replace=False))
+                      for _ in range(n_perm)])
+    # One-sided: constrained means MORE negative than chance.
+    hits = int((draws <= observed).sum())
+    return observed, (hits + 1) / (n_perm + 1)
+
+
+def hypergeometric_p(n_total, n_marked, n_drawn, n_hits):
+    """P(at least n_hits marked items in a draw of n_drawn), exactly."""
+    total = 0.0
+    for i in range(n_hits, min(n_marked, n_drawn) + 1):
+        total += (math.comb(n_marked, i) * math.comb(n_total - n_marked, n_drawn - i)
+                  / math.comb(n_total, n_drawn))
+    return total
 
 
 def percentile_rank(scores, positions):
@@ -96,13 +125,19 @@ def case1_tp53():
     frame = pd.DataFrame(rows)
     print(frame.to_string(index=False))
 
+    obs, pval = permutation_p(scores, list(TP53_HOTSPOTS))
     med = float(np.median(list(pct.values())))
     top10 = sum(1 for v in pct.values() if v >= 90)
+    print(f"\n  permutation test vs random position sets of the same size:")
+    print(f"    observed median sensitivity {obs:.2f} "
+          f"vs protein median {np.median(scores):.2f}, p = {pval:.5f}")
     print(f"\n  median constraint percentile of the six hotspots: {med:.1f}")
     print(f"  hotspots in the most constrained 10% of the protein: {top10}/6")
     print(f"  protein median sensitivity: {np.median(scores):.2f}")
     return frame, {"median_percentile": med, "in_top_decile": top10,
-                   "protein_median_sensitivity": round(float(np.median(scores)), 2)}
+                   "protein_median_sensitivity": round(float(np.median(scores)), 2),
+                   "permutation_p": pval,
+                   "observed_median_sensitivity": round(obs, 2)}
 
 
 def case2_active_sites():
@@ -122,13 +157,15 @@ def case2_active_sites():
         scores, _ = app.compute_sensitivity(seq, MODE, MODEL)
         pct = percentile_rank(scores, sites)
         vals = list(pct.values())
+        _obs, pval = permutation_p(scores, list(sites))
         rows.append({"protein": name, "accession": acc, "length": len(seq),
                      "n_annotated_sites": len(sites),
                      "median_percentile": round(float(np.median(vals)), 1),
-                     "frac_in_top_decile": round(sum(v >= 90 for v in vals) / len(vals), 2)})
+                     "frac_in_top_decile": round(sum(v >= 90 for v in vals) / len(vals), 2),
+                     "permutation_p": round(pval, 6)})
         print(f"  {name:28s} n={len(sites):2d}  median percentile "
               f"{np.median(vals):5.1f}  in top 10%: "
-              f"{sum(v>=90 for v in vals)}/{len(vals)}")
+              f"{sum(v>=90 for v in vals)}/{len(vals)}  p={pval:.5f}")
     frame = pd.DataFrame(rows)
     if len(frame):
         print(f"\n  panel median: {frame['median_percentile'].median():.1f} percentile")
@@ -152,8 +189,18 @@ def case3_engineering():
     tolerant = frame.nlargest(10, "sensitivity")
     print("  Ten most substitution-tolerant positions (library design targets):")
     print(tolerant.to_string(index=False))
+    constrained = frame.nsmallest(10, "sensitivity")
     print("\n  Ten most constrained positions (do not touch):")
-    print(frame.nsmallest(10, "sensitivity").to_string(index=False))
+    print(constrained.to_string(index=False))
+
+    # UniProt annotates four disulfide bridges in this protein. How surprising
+    # is it that the eight participating cysteines all land in the top ten?
+    ss_positions = {24, 145, 48, 133, 82, 98, 94, 112}
+    hits = len(ss_positions & set(constrained["pos"]))
+    pval = hypergeometric_p(len(seq), len(ss_positions), 10, hits)
+    print(f"\n  disulfide cysteines in the top 10: {hits}/{len(ss_positions)}")
+    print(f"  exact hypergeometric p = {pval:.3e} "
+          f"(drawing 10 of {len(seq)} positions at random)")
     return frame
 
 

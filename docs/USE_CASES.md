@@ -25,9 +25,12 @@ mutations. The question: given only the TP53 sequence, does the tool flag them?
 | R282 | -6.06 | Sensitive | 83.2 | R282P (-10.62) |
 
 Median constraint percentile 92.5. Four of six fall in the most constrained
-10% of the protein, all six in the most constrained 17%. The protein's median
-sensitivity is -2.13, so every hotspot is several times more constrained than a
-typical residue.
+10% of the protein, all six in the most constrained 17%.
+
+Against a null model: the six hotspots have a median sensitivity of -7.89,
+against a protein-wide median of -2.13. Drawing 20,000 random sets of six
+positions from the same protein, a set this constrained arises with
+**p = 0.0007**.
 
 **Why this is useful.** The same ranking applied to a gene with no hotspot
 catalogue gives a prioritised shortlist for sequencing panels or functional
@@ -38,20 +41,24 @@ follow-up.
 UniProt curates active site and binding site residues from experimental
 literature. Those annotations are ground truth the model never sees.
 
-| Enzyme | Annotated sites | Median percentile | In top 10% |
-| --- | --- | --- | --- |
-| TEM-1 beta-lactamase | 4 | 97.8 | 4/4 |
-| Phosphoglycerate kinase 1 | 29 | 90.1 | 15/29 |
-| GAPDH | 8 | 91.2 | 4/8 |
-| Lysozyme C | 3 | 83.6 | 1/3 |
-| Carbonic anhydrase 2 | 8 | 79.5 | 4/8 |
-| Cationic trypsin | 7 | 73.9 | 3/7 |
+| Enzyme | Annotated sites | Median percentile | In top 10% | Permutation p |
+| --- | --- | --- | --- | --- |
+| TEM-1 beta-lactamase | 4 | 97.8 | 4/4 | 0.0001 |
+| Phosphoglycerate kinase 1 | 29 | 90.1 | 15/29 | 0.00005 |
+| GAPDH | 8 | 91.2 | 4/8 | 0.00015 |
+| Carbonic anhydrase 2 | 8 | 79.5 | 4/8 | 0.005 |
+| Lysozyme C | 3 | 83.6 | 1/3 | 0.074 |
+| Cationic trypsin | 7 | 73.9 | 3/7 | 0.081 |
 
-Panel median 86.8. Functional residues are consistently ranked as constrained,
-with TEM-1 recovering perfectly. Trypsin is the weakest case, which is
-informative: several of its annotated sites are substrate-binding rather than
-catalytic, and binding residues are under weaker evolutionary constraint than
-catalytic ones.
+Panel median 86.8 percentile. Four of six enzymes reach significance at
+p < 0.01; two do not.
+
+The two that fail are informative rather than embarrassing. Lysozyme has only
+three annotated sites, which is too few to reach significance regardless of how
+well they rank. Trypsin's annotation set mixes catalytic residues with
+substrate-binding residues, and binding residues sit under weaker evolutionary
+constraint than catalytic ones. Reporting a panel median without these two
+p-values would have overstated how uniform the effect is.
 
 **Why this is useful.** For an uncharacterised protein with no structure paper
 behind it, the top-ranked positions are candidate functional sites.
@@ -95,6 +102,9 @@ the disulfide annotations, or any experimental data, yet it identified every
 residue in all four bridges as among the least substitutable in the protein.
 The two non-cysteine entries, G72 and W126, are a buried glycine and a
 conserved tryptophan in the substrate binding cleft.
+
+Drawing 10 positions at random from 147, the probability of capturing all eight
+disulfide cysteines is **p = 1.0e-11** (exact hypergeometric).
 
 **Why this is useful.** A library that randomises the tolerant positions and
 preserves the constrained ones wastes far fewer variants on dead protein.

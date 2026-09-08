@@ -4,7 +4,9 @@
   "case1_tp53": {
     "median_percentile": 92.5,
     "in_top_decile": 4,
-    "protein_median_sensitivity": -2.13
+    "protein_median_sensitivity": -2.13,
+    "permutation_p": 0.0006999650017499125,
+    "observed_median_sensitivity": -7.89
   },
   "case2_panel_median_percentile": 86.85
 }

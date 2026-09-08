@@ -1,12 +1,12 @@
 {
   "mode": "Wildtype marginals (fast)",
   "model": "facebook/esm2_t12_35M_UR50D",
-  "n_assays": 197,
-  "n_variants_total": 644231,
-  "mean_spearman": 0.3017,
-  "median_spearman": 0.3286,
-  "std_spearman": 0.2075,
-  "frac_above_0.3": 0.5228,
-  "frac_above_0.5": 0.2081,
-  "wall_clock_seconds": 14.0
+  "n_assays": 217,
+  "n_variants_total": 696311,
+  "mean_spearman": 0.2913,
+  "median_spearman": 0.3206,
+  "std_spearman": 0.2085,
+  "frac_above_0.3": 0.5115,
+  "frac_above_0.5": 0.1889,
+  "wall_clock_seconds": 17.2
 }
