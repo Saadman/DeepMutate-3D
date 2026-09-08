@@ -220,7 +220,7 @@ def main() -> int:
     (args.out / f"summary_{tag}.json").write_text(json.dumps(summary, indent=2))
 
     print("\n" + "=" * 66)
-    print(f"ProteinGym zero-shot results — {app.resolve_model(args.model)[0]}")
+    print(f"ProteinGym zero-shot results, {app.resolve_model(args.model)[0]}")
     print("=" * 66)
     for key, value in summary.items():
         print(f"  {key:22s} {value}")

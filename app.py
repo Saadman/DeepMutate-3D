@@ -1,5 +1,5 @@
 """
-DeepMutate-3D — interactive protein mutation scanner.
+DeepMutate-3D, interactive protein mutation scanner.
 
 Pipeline
 --------
@@ -278,7 +278,7 @@ def fetch_alphafold_pdb(uniprot_id: str) -> Tuple[Optional[str], str]:
 
 
 # ---------------------------------------------------------------------------
-# Core inference — runs on the ZeroGPU allocation
+# Core inference, runs on the ZeroGPU allocation
 # ---------------------------------------------------------------------------
 def _window_log_probs(model, tokenizer, chunk: str, mode: str, device) -> torch.Tensor:
     """Per-residue log-probability distributions for one window. (len, vocab)."""
@@ -561,7 +561,7 @@ def render_structure(
             "cartoon": {
                 "colorscheme": {
                     "prop": "b",
-                    "gradient": "rwb",  # red = min (fragile), blue = max (tolerant)
+                    "gradient": "rwb", # red = min (fragile), blue = max (tolerant)
                     "min": -span,
                     "max": span,
                 }
@@ -689,13 +689,13 @@ def export_structure(
 # Gradio orchestration
 # ---------------------------------------------------------------------------
 EXAMPLE_PROTEINS: Dict[str, str] = {
-    "Haemoglobin subunit alpha — P69905 (142 aa)": "P69905",
-    "Myoglobin — P02144 (154 aa)": "P02144",
-    "Insulin — P01308 (110 aa)": "P01308",
-    "Lysozyme C — P61626 (148 aa)": "P61626",
-    "Ubiquitin — P0CG48 (685 aa)": "P0CG48",
-    "Tumour suppressor p53 — P04637 (393 aa)": "P04637",
-    "SARS-CoV-2 spike glycoprotein — P0DTC2 (1273 aa)": "P0DTC2",
+    "Haemoglobin subunit alpha, P69905 (142 aa)": "P69905",
+    "Myoglobin, P02144 (154 aa)": "P02144",
+    "Insulin, P01308 (110 aa)": "P01308",
+    "Lysozyme C, P61626 (148 aa)": "P61626",
+    "Ubiquitin, P0CG48 (685 aa)": "P0CG48",
+    "Tumour suppressor p53, P04637 (393 aa)": "P04637",
+    "SARS-CoV-2 spike glycoprotein, P0DTC2 (1273 aa)": "P0DTC2",
 }
 
 
@@ -707,7 +707,7 @@ def load_example(choice: str):
     sequence, note = fetch_uniprot_sequence(uniprot_id)
     if not sequence:
         return gr.update(), uniprot_id, f"Could not load example: {note}"
-    label = choice.split(" — ")[0]
+    label = choice.split(", ")[0]
     return (
         sequence,
         uniprot_id,
@@ -882,7 +882,7 @@ with gr.Blocks(title="DeepMutate-3D", **BLOCKS_KWARGS) as demo:
         "**Protein-language-model mutation scanning, painted onto the AlphaFold fold.**\n\n"
         "ESM-2 scores every possible point mutation as a log-likelihood ratio against "
         "the wildtype residue. Positions the model refuses to change are evolutionarily "
-        "constrained — likely structural or functional cores — and glow **red**. "
+        "constrained, likely structural or functional cores, and glow **red**. "
         "Positions it happily swaps glow **blue**.",
         elem_classes="deepmutate-title",
     )

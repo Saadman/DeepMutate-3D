@@ -11,149 +11,153 @@ pinned: false
 license: apache-2.0
 short_description: ESM-2 mutation scanning painted onto the AlphaFold 3D fold
 models:
-  - facebook/esm2_t30_150M_UR50D
-preload_from_hub:
-  - facebook/esm2_t30_150M_UR50D
   - facebook/esm2_t33_650M_UR50D
+  - facebook/esm2_t30_150M_UR50D
   - facebook/esm2_t12_35M_UR50D
+preload_from_hub:
+  - facebook/esm2_t33_650M_UR50D
 ---
 
-# 🧬 DeepMutate-3D
+# DeepMutate-3D
 
-**Which residues in your protein can't tolerate mutation — and where are they in the fold?**
+Predict the effect of every possible point mutation in a protein and see the
+result on its 3D structure.
 
-DeepMutate-3D scores every possible single amino-acid substitution with the ESM-2
-protein language model and paints the result onto the protein's AlphaFold
-structure as an interactive 3D heatmap.
+DeepMutate-3D scores all 19 possible substitutions at every residue with the
+ESM-2 protein language model, then paints the per-residue sensitivity onto the
+AlphaFold predicted fold. Red marks positions where mutation is likely to be
+damaging. Blue marks positions that tolerate change.
 
-**Red = evolutionarily constrained.** Positions the model refuses to change are
-usually active sites, buried cores, or binding interfaces. **Blue = tolerant.**
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97-Live%20Demo-yellow)](https://huggingface.co/spaces/ras1992/DeepMutate-3D)
 
-### ▶️ [Try it in your browser — no install](https://huggingface.co/spaces/ras1992/DeepMutate-3D)
+## Contents
 
----
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Usage](#usage)
+- [How it works](#how-it-works)
+- [Benchmarks](#benchmarks)
+- [Examples](#examples)
+- [Citation](#citation)
+- [License](#license)
 
-## What you get
-
-Enter a UniProt ID (or paste a sequence) and press scan:
-
-- **A 3D structure** coloured by mutation sensitivity, which you can rotate and zoom.
-  Hover any point on the ribbon to read that residue's scores in the panel above it.
-- **A per-residue table** giving each position's sensitivity score, a verdict
-  (Critical / Sensitive / Tolerant), and its most damaging and most tolerated
-  substitution.
-
-- **Two downloads**: the sensitivity table as CSV, and the scored structure as a
-  PDB file whose B-factor column holds the sensitivity score instead of pLDDT —
-  so it opens straight in PyMOL or ChimeraX (`spectrum b, red_white_blue`).
-
-Leave the sequence box empty and DeepMutate-3D fetches the canonical sequence from
-UniProt for you — which also guarantees the scores line up with the structure.
-
-## Run it locally
-
-Requires Python 3.10+. Works on Apple Silicon (`mps`), NVIDIA (`cuda`) or CPU —
-the device is chosen automatically.
+## Install
 
 ```bash
 git clone https://github.com/Saadman/DeepMutate-3D.git
 cd DeepMutate-3D
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python app.py                      # http://127.0.0.1:7860
 ```
 
-First launch downloads ~600 MB of ESM-2 weights, then caches them.
+Runs on NVIDIA (`cuda`), Apple Silicon (`mps`) or CPU. The device is selected
+automatically. The first run downloads the model weights and caches them.
 
-**Try `P69905`** (haemoglobin subunit alpha) with the sequence box empty. The top
-hotspot is **H88** — the proximal histidine that coordinates the haem iron. The
-model is given no structure and no annotations; it recovers the functional core
-from sequence alone.
+## Quick start
+
+```bash
+python app.py
+```
+
+Open http://127.0.0.1:7860, enter a UniProt ID such as `P69905`, leave the
+sequence box empty, and press scan.
+
+## Usage
+
+**Inputs.** A protein sequence (raw or FASTA) and a UniProt accession. If the
+sequence box is empty, the canonical sequence is fetched from UniProt, which
+also guarantees the scores line up with the structure.
+
+**Options.**
+
+| Option | Choices | Notes |
+| --- | --- | --- |
+| Model | ESM-2 35M, 150M, 650M | 650M is the default and the most accurate |
+| Scoring mode | masked marginals, wildtype marginals | wildtype is far faster and nearly as accurate |
+
+**Outputs.**
+
+- An interactive 3D structure coloured by mutation sensitivity. Hover any point
+  on the ribbon to read that residue's scores.
+- A per-residue table: sensitivity score, verdict, most damaging substitution
+  and most tolerated substitution.
+- Two downloads: the table as CSV, and the structure as a PDB file whose
+  B-factor column carries the sensitivity score, so it opens in PyMOL or
+  ChimeraX and colours with `spectrum b, red_white_blue`.
+
+Proteins longer than the 1022 residue ESM-2 context are covered with
+overlapping windows, so length is not a limit.
 
 ## How it works
 
-| Stage | |
-|---|---|
-| **Score** | For every position, ESM-2 computes `log P(mutant) − log P(wildtype)` for all 19 substitutions. Averaging them gives one *Residue Sensitivity Score* per position. |
-| **Fetch** | The predicted fold is retrieved from the AlphaFold DB by UniProt accession. |
-| **Paint** | Scores are written into the PDB B-factor column and rendered by py3Dmol with a red-white-blue gradient centred on zero. |
+For every position `i` and every substitution `m`, the model computes a
+log-likelihood ratio against the wildtype residue:
 
-Three ESM-2 sizes are selectable (35M / 150M / 650M) and two scoring modes.
-**Masked marginals** masks each position in turn (one forward pass per residue;
-the Meier et al. protocol). **Wildtype marginals** uses a single pass per window.
-See the benchmark below before assuming you need the slow one.
+```
+LLR(i, m) = log P(m | context) - log P(wildtype_i | context)
+```
 
-Proteins longer than ESM-2's 1024-token context are covered by overlapping
-1022-residue windows, so the full 1273-residue SARS-CoV-2 spike scans fine.
+The 19 non-wildtype LLRs at each position are averaged into a single Residue
+Sensitivity Score. Scores are written into the PDB B-factor column and rendered
+with py3Dmol using a red-white-blue gradient centred on zero.
 
-## Benchmark
+Nothing is trained or fine-tuned here. Predictions are zero-shot.
 
-Evaluated zero-shot against [ProteinGym](https://proteingym.org) — **197 deep
-mutational scanning assays, 644,231 experimentally measured variants**. No
-experimental data is shown to the model. Metric is per-assay Spearman ρ between
-predicted and measured mutation effects.
+## Benchmarks
 
-| Model | Scoring mode | Mean ρ | Median ρ | ρ > 0.3 | Compute |
-|---|---|---|---|---|---|
-| ESM-2 35M | wildtype marginals | 0.302 | 0.329 | 52% | 14 s |
-| ESM-2 150M | wildtype marginals | 0.392 | 0.441 | 71% | **11 s** |
-| ESM-2 150M | masked marginals | 0.399 | 0.453 | 72% | 4,903 s |
-| **ESM-2 650M** | **wildtype marginals** | **0.431** | **0.479** | **78%** | **37 s** |
+Zero-shot, no experimental data shown to the model.
 
-Two findings worth acting on:
+| Benchmark | Scale | Result |
+| --- | --- | --- |
+| [ProteinGym](https://proteingym.org) | 197 DMS assays, 644,231 variants | Spearman rho 0.431 |
+| ClinVar | 2,011 proteins, 38,901 variants | AUROC 0.881 |
 
-**Masked marginals is not worth it at this scale.** It wins on 72% of assays but
-by **+0.007 mean ρ for 462× the compute**.
+Full tables, the model size ablation, and the runtime comparison across CPU,
+Apple Silicon and NVIDIA are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
-**Spend compute on a bigger model, not a more expensive scoring protocol.**
-ESM-2 650M in *fast* mode (ρ = 0.431, 37 s) beats ESM-2 150M in *slow* mode
-(ρ = 0.399, 4,903 s) — better accuracy for **133× less compute**. 650M improves
-on 150M across 70% of assays.
-
-Reproduce it yourself:
+Reproduce:
 
 ```bash
 pip install -r validation/requirements.txt
+mkdir -p validation/data
 curl -L -o validation/data/DMS_substitutions.parquet \
   https://proteingym.s3.amazonaws.com/DMS_substitutions.parquet
 python validation/run_proteingym.py --mode wt
 ```
 
-Per-assay results are in [`validation/results/`](validation/results/).
+## Examples
 
-**Where it fails, and where that turned out to be fixable.** At 150M the weakest
-assays (ρ ≈ 0) were influenza haemagglutinin, engineered fluorescent proteins and
-bacterial pilin. It is tempting to explain that away as fast-evolving proteins
-being fundamentally unsuited to a model of evolutionary constraint — but the
-ablation shows that is only partly true. Influenza HA goes from ρ = 0.003 at
-150M to **ρ = 0.464 at 650M**; the limitation there was model capacity, not the
-premise. Designed fluorescent proteins with no evolutionary history stay near
-zero at every model size, and that failure does appear to be fundamental.
+Worked case studies with reproducible output are in
+[docs/USE_CASES.md](docs/USE_CASES.md), covering cancer hotspot recovery in
+TP53, catalytic site recovery across an enzyme panel, and selecting tolerant
+positions for library design.
 
-Single-chain AlphaFold models mean interface residues that only matter in a
-complex are under-weighted, and for proteins longer than 1022 residues a score
-depends slightly on window placement.
+```bash
+python examples/use_cases.py
+```
 
-## Citing
+## Citation
 
-If you use DeepMutate-3D, please cite it (see [`CITATION.cff`](CITATION.cff)) and
-the underlying resources — **AlphaFold's CC-BY-4.0 terms require attribution**:
+If you use DeepMutate-3D, please cite it (see [CITATION.cff](CITATION.cff)) and
+the underlying resources. AlphaFold data is CC-BY-4.0 and requires attribution.
 
-- Lin, Z. et al. *Evolutionary-scale prediction of atomic-level protein structure with a language model.* Science 379, 1123–1130 (2023).
-- Meier, J. et al. *Language models enable zero-shot prediction of the effects of mutations on protein function.* NeurIPS (2021).
-- Jumper, J. et al. *Highly accurate protein structure prediction with AlphaFold.* Nature 596, 583–589 (2021).
-- Varadi, M. et al. *AlphaFold Protein Structure Database in 2024.* Nucleic Acids Research 52, D368–D375 (2024).
+- Lin, Z. et al. Evolutionary-scale prediction of atomic-level protein structure with a language model. Science 379, 1123-1130 (2023).
+- Meier, J. et al. Language models enable zero-shot prediction of the effects of mutations on protein function. NeurIPS (2021).
+- Jumper, J. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583-589 (2021).
+- Varadi, M. et al. AlphaFold Protein Structure Database in 2024. Nucleic Acids Research 52, D368-D375 (2024).
 
 ## License
 
-[Apache-2.0](LICENSE) — free for academic and commercial use.
+[Apache-2.0](LICENSE). Free for academic and commercial use.
 
 DeepMutate-3D retrieves but does not redistribute ESM-2 (MIT), AlphaFold DB
 structures (CC-BY-4.0) and UniProt sequences (CC-BY-4.0). Full attributions in
 [NOTICE](NOTICE).
 
-## ⚠️ Not a clinical tool
+## Disclaimer
 
-DeepMutate-3D predicts evolutionary constraint, which correlates with — but is not
-identical to — pathogenicity. It is a research tool for hypothesis generation and
-must not be used to inform medical decisions.
+DeepMutate-3D predicts evolutionary constraint, which correlates with but is not
+identical to pathogenicity. It is a research tool for hypothesis generation and
+must not be used to inform clinical or diagnostic decisions.

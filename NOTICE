@@ -16,7 +16,7 @@ runtime. Their licences govern that use, and the attributions here are required
 independently of the Apache-2.0 licence covering DeepMutate-3D's own source.
 
 ESM-2 protein language model
-    facebook/esm2_t30_150M_UR50D — MIT License, Meta AI (FAIR).
+    facebook/esm2_t30_150M_UR50D, MIT License, Meta AI (FAIR).
     Lin, Z. et al. "Evolutionary-scale prediction of atomic-level protein
     structure with a language model." Science 379, 1123-1130 (2023).
     Meier, J. et al. "Language models enable zero-shot prediction of the effects
