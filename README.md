@@ -139,6 +139,12 @@ and the underlying resources. AlphaFold data is CC-BY-4.0 and requires attributi
 - Jumper, J. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583-589 (2021).
 - Varadi, M. et al. AlphaFold Protein Structure Database in 2024. Nucleic Acids Research 52, D368-D375 (2024).
 
+## Contributing
+
+Issues and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) lists
+the gaps I know about, including the AlphaMissense comparison and the untested
+650M masked-marginal configuration.
+
 ## License
 
 [Apache-2.0](LICENSE). Free for academic and commercial use.
