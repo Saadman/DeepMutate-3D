@@ -16,6 +16,7 @@ damaging. Blue marks positions that tolerate change.
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python"></a>
   <a href="https://huggingface.co/spaces/ras1992/DeepMutate-3D"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Live%20Demo-yellow" alt="Live Demo"></a>
+  <a href="https://doi.org/10.5281/zenodo.22679613"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22679613-blue" alt="DOI"></a>
 </p>
 
 ## Contents
@@ -126,8 +127,12 @@ python examples/use_cases.py
 
 ## Citation
 
-If you use DeepMutate-3D, please cite it (see [CITATION.cff](CITATION.cff)) and
-the underlying resources. AlphaFold data is CC-BY-4.0 and requires attribution.
+If you use DeepMutate-3D, please cite the preprint:
+
+> Karim, R. DeepMutate-3D: interactive protein language model mutation scanning
+> on predicted structures. Zenodo (2026). https://doi.org/10.5281/zenodo.22679613
+
+and the underlying resources. AlphaFold data is CC-BY-4.0 and requires attribution.
 
 - Lin, Z. et al. Evolutionary-scale prediction of atomic-level protein structure with a language model. Science 379, 1123-1130 (2023).
 - Meier, J. et al. Language models enable zero-shot prediction of the effects of mutations on protein function. NeurIPS (2021).

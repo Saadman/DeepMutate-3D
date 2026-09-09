@@ -23,6 +23,7 @@ keywords:
   - variant effect prediction
   - deep mutational scanning
   - structural bioinformatics
+doi: "10.5281/zenodo.22679613"
 license: Apache-2.0
 version: 0.1.0
 date-released: "2026-09-07"

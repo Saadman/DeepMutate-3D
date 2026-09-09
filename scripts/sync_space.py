@@ -18,7 +18,7 @@ import sys
 import tempfile
 
 from huggingface_hub import HfApi
-from huggingface_hub.hf_api import CommitOperationAdd
+from huggingface_hub.hf_api import CommitOperationAdd, CommitOperationDelete
 
 REPO = "ras1992/DeepMutate-3D"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -45,10 +45,20 @@ def main(argv: list[str]) -> int:
         else:
             ops.append(CommitOperationAdd(name, str(ROOT / name)))
 
-    info = HfApi().create_commit(
+    api = HfApi()
+    # Anything on the Space that is no longer tracked here is removed, so the
+    # two stay in genuine sync rather than the Space accumulating stale files.
+    if not argv[1:]:
+        keep = set(files) | {".gitattributes", "space_header.yaml"}
+        stale = sorted(set(api.list_repo_files(REPO, repo_type="space")) - keep)
+        ops += [CommitOperationDelete(path_in_repo=f) for f in stale]
+        if stale:
+            print(f"removing {len(stale)} stale file(s) from the Space")
+
+    info = api.create_commit(
         repo_id=REPO, repo_type="space", operations=ops,
-        commit_message=f"Sync {len(ops)} file(s) from the repository")
-    print(f"synced {len(ops)} files -> {REPO}")
+        commit_message=f"Sync {len(ops)} change(s) from the repository")
+    print(f"synced {len(ops)} operations -> {REPO}")
     print("commit:", getattr(info, "oid", info))
     return 0
 
