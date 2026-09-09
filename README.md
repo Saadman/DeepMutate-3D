@@ -48,7 +48,11 @@ automatically. The first run downloads the model weights and caches them.
 python app.py
 ```
 
-Open http://127.0.0.1:7860, enter a UniProt ID such as `P69905`, leave the
+Gradio prints the local URL on startup, usually http://127.0.0.1:7860. It
+falls back to the next free port if that one is taken, and honours
+`GRADIO_SERVER_PORT` if you set it.
+
+Open the printed URL, enter a UniProt ID such as `P69905`, leave the
 sequence box empty, and press scan.
 
 ## Usage
